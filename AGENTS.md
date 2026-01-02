@@ -339,3 +339,33 @@ it('should detect completed session', async () => {
   expect(updatedTask?.status).toBe('completed');
 });
 ```
+
+## DOCUMENTATION GUIDELINES
+
+### Documentation Structure
+- **Location**: `/docs/` directory
+- **File Naming**: Use kebab-case for filenames (e.g., `user-guide.md`)
+- **Organization**: Group related documentation in subdirectories
+
+### Documentation Style
+- **Markdown**: Use standard Markdown syntax
+- **Code Blocks**: Use triple backticks with language specification
+- **Links**: Use relative links for internal references
+- **Images**: Place in `/docs/assets/` directory
+
+### Documentation Content
+- **Overview**: High-level description of the feature
+- **Usage**: Step-by-step instructions for common tasks
+- **Examples**: Code examples demonstrating usage
+- **API Reference**: Detailed API documentation
+- **Troubleshooting**: Common issues and solutions
+
+### Documentation Updates
+- **When to Update**: When adding new features, changing existing behavior, or fixing bugs
+- **What to Update**: All affected documentation files
+- **How to Update**: Follow the same style and structure as existing documentation
+
+### Documentation Review
+- **Peer Review**: Have another team member review documentation changes
+- **Testing**: Verify that all examples work correctly
+- **Consistency**: Ensure documentation is consistent with code and other documentation
