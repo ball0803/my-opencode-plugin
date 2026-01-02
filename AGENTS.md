@@ -1,4 +1,4 @@
-# AGENTS.md - Documentation Guidelines
+# AGENTS.md - Documentation Guidelines for My-OpenCode-Plugin
 
 This file provides comprehensive guidelines for updating and writing documentation in the My-OpenCode-Plugin project. It is specifically designed for agentic coding agents working on this repository.
 
@@ -7,7 +7,7 @@ This file provides comprehensive guidelines for updating and writing documentati
 The project follows a structured documentation approach with the following key principles:
 
 1. **Modular Structure**: Documentation is organized by category and audience
-2. **Consistent Style**: All documentation follows the same formatting and style guidelines
+2. **Consistent Style**: All documentation follows the same formatting and style guidelines  
 3. **Comprehensive Coverage**: Every feature, API, and component is documented
 4. **Example-Driven**: Documentation includes practical examples
 5. **Versioned**: Documentation is kept in sync with code changes
