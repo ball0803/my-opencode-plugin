@@ -1,23 +1,24 @@
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import { BackgroundManager } from './manager';
+import type { AgentSession } from './types';
 
 describe('BackgroundManager', () => {
-  let manager: BackgroundManager;
-  let mockSession: any;
+   let manager: BackgroundManager;
+   let mockSession: AgentSession;
 
-  beforeEach(() => {
-    mockSession = {
-      id: 'test-session',
-      getStatus: jest.fn().mockResolvedValue('running'),
-      sendMessage: jest.fn().mockResolvedValue(undefined),
-    };
-    manager = new BackgroundManager({ pollInterval: 100, taskTTL: 1000 });
-    manager.initialize(mockSession);
-  });
+   beforeEach(() => {
+     mockSession = {
+       id: 'test-session',
+       getStatus: jest.fn().mockResolvedValue('running'),
+       sendMessage: jest.fn().mockResolvedValue(undefined),
+     };
+     manager = new BackgroundManager({ pollInterval: 100, taskTTL: 1000 });
+     manager.initialize(mockSession);
+   });
 
   afterEach(async () => {
     await manager.cleanup();
-  });
+  }, 5000);
 
   describe('createTask', () => {
     it('should create a task with auto-generated ID', async () => {
@@ -85,36 +86,40 @@ describe('BackgroundManager', () => {
     });
   });
 
-  describe('task polling', () => {
-    it('should detect completed session', async () => {
-      // given
-      const task = await manager.createTask({ options: { agent: 'test' } });
-      mockSession.getStatus.mockResolvedValueOnce('completed');
+   describe('task polling', () => {
+     it('should detect completed session', async () => {
+       // given
+       const task = await manager.createTask({ options: { agent: 'test' } });
+       mockSession.getStatus.mockResolvedValueOnce('completed');
 
-      // when
-      await manager.pollTasks();
+       // when
+       // Access the private method through a workaround
+       const pollTasks = (manager as any).pollTasks.bind(manager);
+       await pollTasks();
 
-      // then
-      const updatedTask = await manager.getTask(task.id);
-      expect(updatedTask?.status).toBe('completed');
-    });
-  });
+       // then
+       const updatedTask = await manager.getTask(task.id);
+       expect(updatedTask?.status).toBe('completed');
+     });
+   });
 
-  describe('task cleanup', () => {
-    it('should fail tasks that exceed TTL', async () => {
-      // given
-      jest.useFakeTimers();
-      const task = await manager.createTask({ options: { agent: 'test' } });
+   describe('task cleanup', () => {
+     it('should fail tasks that exceed TTL', async () => {
+       // given
+       jest.useFakeTimers();
+       const task = await manager.createTask({ options: { agent: 'test' } });
 
-      // when
-      jest.advanceTimersByTime(1001); // Advance past TTL
-      await manager.cleanupStaleTasks();
+       // when
+       jest.advanceTimersByTime(1001); // Advance past TTL
+       // Access the private method through a workaround
+       const cleanupStaleTasks = (manager as any).cleanupStaleTasks.bind(manager);
+       cleanupStaleTasks();
 
-      // then
-      const updatedTask = await manager.getTask(task.id);
-      expect(updatedTask?.status).toBe('error');
-      expect(updatedTask?.error).toContain('timed out');
-      jest.useRealTimers();
-    });
-  });
+       // then
+       const updatedTask = await manager.getTask(task.id);
+       expect(updatedTask?.status).toBe('error');
+       expect(updatedTask?.error).toContain('timed out');
+       jest.useRealTimers();
+     });
+   });
 });

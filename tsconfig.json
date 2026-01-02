@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "typeRoots": ["./src"],
+    "target": "ESNext",
+    "module": "Node16",
+    "moduleResolution": "node16",
+    "declaration": true,
+    "declarationDir": "dist",
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "lib": ["ESNext", "DOM"],
+    "types": []
+  },
+  "include": ["src/**/*", "types.d.ts"],
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts"]
+}

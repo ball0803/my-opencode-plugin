@@ -1,5 +1,5 @@
-import type { BackgroundTask, BackgroundTaskOptions, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult } from '../background-agent/types';
-import { BackgroundManager } from '../background-agent/manager';
+import type { BackgroundTask, BackgroundTaskOptions, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult } from '../../background-agent/types';
+import { BackgroundManager } from '../../background-agent/manager';
 
 export function createBackgroundTaskTool(manager: BackgroundManager) {
   return {
@@ -67,7 +67,7 @@ export function getBackgroundOutputTool(manager: BackgroundManager) {
       required: ['taskId'],
     },
     async execute(options: GetBackgroundOutputOptions): Promise<GetBackgroundOutputResult> {
-      return manager.getOutput(options.taskId, options);
+      return manager.getOutput(options.taskId, { taskId: options.taskId });
     },
   };
 }
@@ -98,7 +98,7 @@ export function cancelBackgroundTaskTool(manager: BackgroundManager) {
         return manager.cancelAllTasks(options);
       }
       if (options.taskId) {
-        return manager.cancelTask(options.taskId, options);
+        return manager.cancelTask(options.taskId, {});
       }
       throw new Error('Either taskId or all must be provided');
     },

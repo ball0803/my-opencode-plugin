@@ -58,7 +58,7 @@ export function createCallAgentTool(manager: BackgroundManager) {
       return this.callAgentDirectly(options);
     },
 
-    private async callAgentDirectly(options: AgentCallOptions): Promise<AgentCallResult> {
+    async callAgentDirectly(options: AgentCallOptions): Promise<AgentCallResult> {
       try {
         const result = await manager.callAgent(options.agent, options.prompt, options.options);
         return {

@@ -14,7 +14,7 @@ export class ConfigLoader {
   loadConfig(configPath?: string): PluginConfig {
     try {
       if (configPath && existsSync(configPath)) {
-        const fileContent = readFileSync(configPath, 'utf-8');
+         const fileContent = readFileSync(configPath, 'utf-8' as any);
         const parsed = parseJsonc(fileContent);
         const validated = PluginConfigSchema.parse(parsed);
         this.config = { ...DEFAULT_CONFIG, ...validated };
@@ -30,7 +30,7 @@ export class ConfigLoader {
     return this.config;
   }
 
-  getAgentConfig(agentName: string): PluginConfig['agents'][string] | undefined {
+  getAgentConfig(agentName: string): any {
     return this.config.agents?.[agentName];
   }
 

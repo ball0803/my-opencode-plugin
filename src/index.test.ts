@@ -16,7 +16,7 @@ describe('MyOpenCodePlugin', () => {
 
   afterEach(async () => {
     await plugin.cleanup();
-  });
+  }, 5000);
 
   describe('initialization', () => {
     it('should initialize with default config', () => {

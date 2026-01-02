@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
-import { createBackgroundTaskTool } from './tools';
+import { createBackgroundTaskTools } from './index';
 import { BackgroundManager } from '../../background-agent/manager';
 
 describe('Background Task Tools', () => {
@@ -8,6 +8,12 @@ describe('Background Task Tools', () => {
 
   beforeEach(() => {
     manager = new BackgroundManager();
+    const mockSession = {
+      id: 'test-session',
+      getStatus: jest.fn().mockResolvedValue('running'),
+      sendMessage: jest.fn().mockResolvedValue(undefined),
+    };
+    manager.initialize(mockSession);
     tools = createBackgroundTaskTools(manager);
   });
 

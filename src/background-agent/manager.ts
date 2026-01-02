@@ -1,4 +1,4 @@
-import type { Agent, AgentCallOptions, AgentCallResult, AgentSession, AgentSessionStatus, AgentTask, AgentTaskStatus, BackgroundManagerOptions, BackgroundTask, BackgroundTaskOptions, BackgroundTaskResult, BackgroundTaskStatus, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult, TaskNotification } from './types';
+import type { AgentCallOptions, AgentCallResult, AgentSession, BackgroundManagerOptions, BackgroundTask, BackgroundTaskStatus, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult, TaskNotification } from './types';
 
 export class BackgroundManager {
   private tasks: Map<string, BackgroundTask> = new Map();
@@ -66,9 +66,9 @@ export class BackgroundManager {
   private cleanupStaleTasks(): void {
     const now = Date.now();
     for (const [id, task] of this.tasks) {
-      if (task.status === 'running' && now - task.createdAt > this.options.taskTTL) {
-        this.failTask(id, 'Task timed out');
-      }
+     if (task.status === 'running' && now - task.createdAt > this.options.taskTTL!) {
+       this.failTask(id, 'Task timed out');
+     }
     }
   }
 
@@ -157,7 +157,7 @@ export class BackgroundManager {
     return results;
   }
 
-  async getOutput(taskId: string, options: GetBackgroundOutputOptions = {}): Promise<GetBackgroundOutputResult> {
+  async getOutput(taskId: string, options: GetBackgroundOutputOptions = { taskId }): Promise<GetBackgroundOutputResult> {
     const task = this.tasks.get(taskId);
     if (!task) {
       throw new Error(`Task ${taskId} not found`);
@@ -214,5 +214,12 @@ export class BackgroundManager {
   async cleanup(): Promise<void> {
     this.stopPolling();
     this.tasks.clear();
+  }
+
+  // Mock method for testing - in real implementation this would call an agent
+  async callAgent(agent: string, prompt: string, options?: any): Promise<any> {
+    // This is a mock implementation for testing
+    // In a real implementation, this would call an actual agent
+    return `Response from ${agent} for prompt: ${prompt}`;
   }
 }

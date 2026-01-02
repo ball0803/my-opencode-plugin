@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
-import { createCallAgentTool } from './tools';
+import { createCallAgentTools } from './index';
 import { BackgroundManager } from '../../background-agent/manager';
 
 describe('Call Agent Tools', () => {
@@ -8,14 +8,20 @@ describe('Call Agent Tools', () => {
 
   beforeEach(() => {
     manager = new BackgroundManager();
+    const mockSession = {
+      id: 'test-session',
+      getStatus: jest.fn().mockResolvedValue('running'),
+      sendMessage: jest.fn().mockResolvedValue(undefined),
+    };
+    manager.initialize(mockSession);
     tools = createCallAgentTools(manager);
   });
 
   describe('call_agent tool', () => {
     it('should call agent in foreground', async () => {
       // given
-      const mockCallAgent = jest.fn().mockResolvedValue('agent response');
-      manager.callAgent = mockCallAgent;
+       const mockCallAgent = jest.fn().mockResolvedValue('agent response');
+       manager.callAgent = mockCallAgent as any;
 
       const options = {
         agent: 'test-agent',
@@ -50,8 +56,8 @@ describe('Call Agent Tools', () => {
 
     it('should handle agent errors', async () => {
       // given
-      const mockCallAgent = jest.fn().mockRejectedValue(new Error('Agent error'));
-      manager.callAgent = mockCallAgent;
+       const mockCallAgent = jest.fn().mockRejectedValue(new Error('Agent error'));
+       manager.callAgent = mockCallAgent as any;
 
       const options = {
         agent: 'test-agent',

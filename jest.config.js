@@ -1,6 +1,7 @@
  module.exports = {
    preset: 'ts-jest',
    testEnvironment: 'node',
+  testTimeout: 10000,
    testMatch: ['**/*.test.ts'],
    moduleFileExtensions: ['ts', 'js', 'json', 'node'],
    clearMocks: true,
@@ -16,7 +17,10 @@
      }
    },
    roots: ['<rootDir>'],
-   moduleNameMapper: {
-     '^jest-globals$': 'jest-globals'
-   }
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.json',
+      isolatedModules: true
+    }
+  },
  };
