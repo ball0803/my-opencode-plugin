@@ -35,7 +35,7 @@ Background agent orchestration system for OpenCode plugins. Provides async task 
 
 ## CONVENTIONS
 
-- **npm only**: `npm run`, `npm test`
+- **bun only**: `bun run`, `bun test`
 - **TypeScript**: Strict mode
 - **Testing**: Jest with 80% coverage
 - **Error handling**: Always try/catch
@@ -50,9 +50,9 @@ Background agent orchestration system for OpenCode plugins. Provides async task 
 ## COMMANDS
 
 ```bash
-npm run build      # Build with TypeScript
-npm test           # Run Jest tests
-npm run test:watch # Watch mode
+bun run build      # Build with TypeScript
+bun run test       # Run Jest tests
+bun run test:watch # Watch mode
 ```
 
 ## NOTES
@@ -66,17 +66,17 @@ npm run test:watch # Watch mode
 ### Build Commands
 
 ```bash
-npm run build      # Build the project using TypeScript compiler
-npm run dev        # Build in watch mode (auto-rebuild on changes)
+bun run build      # Build the project using TypeScript compiler
+bun run dev        # Build in watch mode (auto-rebuild on changes)
 ```
 
 ### Test Commands
 
 ```bash
-npm test           # Run all tests using Jest
-npm run test:watch # Run tests in watch mode
-npm run test:coverage # Run tests with coverage report
-npm run test:single # Run a specific test (use with -t flag)
+bun run test       # Run all tests using Jest
+bun run test:watch # Run tests in watch mode
+bun run test:coverage # Run tests with coverage report
+bun run test:single # Run a specific test (use with -t flag)
 ```
 
 ### Running a Single Test
@@ -85,13 +85,13 @@ To run a specific test file or test case:
 
 ```bash
 # Run a specific test file
-npx jest src/tools/agent-discovery/__tests__/tools.test.ts
+bun run jest src/tools/agent-discovery/__tests__/tools.test.ts
 
 # Run a specific test by name
-npx jest -t "list_agents tool"
+bun run jest -t "list_agents tool"
 
 # Run tests matching a pattern
-npx jest -t "Agent Discovery"
+bun run jest -t "Agent Discovery"
 ```
 
 ### Test Configuration
