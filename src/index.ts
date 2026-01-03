@@ -1,6 +1,8 @@
 import { BackgroundManager } from './background-agent/manager';
 import { createBackgroundTaskTools } from './tools/background-task';
 import { createCallAgentTools } from './tools/call-agent';
+import { createSubagentTools } from './tools/subagent';
+import { createAgentDiscoveryTools } from './tools/agent-discovery';
 import { ConfigLoader } from './config';
 import { createConfigHandler } from './plugin-handlers/config-handler';
 import type { PluginConfig } from './config/schema';
@@ -26,6 +28,9 @@ export class MyOpenCodePlugin {
       pollInterval: this.config.background?.pollInterval,
       ...options.backgroundManagerOptions,
     });
+    
+    // Attach config loader to manager for agent discovery
+    (this.backgroundManager as any).configLoader = this.configLoader;
   }
 
   async initialize(session: AgentSession): Promise<void> {
@@ -37,6 +42,8 @@ export class MyOpenCodePlugin {
     return {
       ...createBackgroundTaskTools(this.backgroundManager),
       ...createCallAgentTools(this.backgroundManager),
+      ...createSubagentTools(this.backgroundManager),
+      ...createAgentDiscoveryTools(this.backgroundManager),
     };
   }
 

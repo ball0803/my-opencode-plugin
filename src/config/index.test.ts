@@ -24,23 +24,26 @@ describe('ConfigLoader', () => {
   });
 
   describe('loadConfig', () => {
-     it('should load config from file', () => {
-       // given
-       const mockConfig = {
-         agents: { test: { model: 'test-model' } },
-         background: { maxConcurrentTasks: 5 }
-       };
-       mockFs.existsSync.mockReturnValue(true);
-       mockFs.readFileSync.mockReturnValue(JSON.stringify(mockConfig));
-       configLoader = new ConfigLoader();
+      it('should load config from file', () => {
+        // given
+        const mockConfig = {
+          agents: { test: { model: 'test-model' } },
+          background: { maxConcurrentTasks: 5 }
+        };
+        mockFs.existsSync.mockReturnValue(true);
+        mockFs.readFileSync.mockReturnValue(JSON.stringify(mockConfig));
+        configLoader = new ConfigLoader();
 
-       // when
-       const config = configLoader.loadConfig('test.json');
+        // when
+        const config = configLoader.loadConfig('test.json');
 
-      // then
-      expect(config.agents).toEqual(mockConfig.agents);
+       // then
+       // Note: Schema adds default values like 'disabled: false' to agents
+       expect(config.agents.test).toEqual(
+         expect.objectContaining({ model: 'test-model', disabled: false })
+       );
        expect(config.background?.maxConcurrentTasks).toBe(5);
-    });
+     });
 
      it('should use default config when file does not exist', () => {
        // given
@@ -100,19 +103,81 @@ describe('ConfigLoader', () => {
     });
   });
 
-   describe('hasPermission', () => {
-     it('should check agent permissions', () => {
-       // given
-       configLoader = new ConfigLoader();
-       configLoader.mergeConfig({
-         permissions: { test: ['read', 'write'] }
-       });
+    describe('hasPermission', () => {
+      it('should check agent permissions', () => {
+        // given
+        configLoader = new ConfigLoader();
+        configLoader.mergeConfig({
+          permissions: { test: ['read', 'write'] }
+        });
+
+       // when/then
+       expect(configLoader.hasPermission('test', 'read')).toBe(true);
+       expect(configLoader.hasPermission('test', 'write')).toBe(true);
+       expect(configLoader.hasPermission('test', 'delete')).toBe(false);
+       expect(configLoader.hasPermission('unknown', 'read')).toBe(true); // Default allow
+     });
+   });
+
+  describe('Agent Discovery Methods', () => {
+    it('should return available agents', () => {
+      // given
+      configLoader = new ConfigLoader();
+      configLoader.mergeConfig({
+        agents: { agent1: { model: 'model1' }, agent2: { model: 'model2' } }
+      });
+
+      // when
+      const agents = configLoader.getAvailableAgents();
+
+      // then
+      expect(agents).toEqual(['agent1', 'agent2']);
+    });
+
+    it('should check if agent is available', () => {
+      // given
+      configLoader = new ConfigLoader();
+      configLoader.mergeConfig({
+        agents: { available: { model: 'model1' } }
+      });
 
       // when/then
-      expect(configLoader.hasPermission('test', 'read')).toBe(true);
-      expect(configLoader.hasPermission('test', 'write')).toBe(true);
-      expect(configLoader.hasPermission('test', 'delete')).toBe(false);
-      expect(configLoader.hasPermission('unknown', 'read')).toBe(true); // Default allow
+      expect(configLoader.isAgentAvailable('available')).toBe(true);
+      expect(configLoader.isAgentAvailable('unavailable')).toBe(false);
+    });
+
+    it('should check if agent is disabled', () => {
+      // given
+      configLoader = new ConfigLoader();
+      configLoader.mergeConfig({
+        agents: {
+          enabled: { model: 'model1', disabled: false },
+          disabled: { model: 'model2', disabled: true }
+        }
+      });
+
+      // when/then
+      expect(configLoader.isAgentDisabled('enabled')).toBe(false);
+      expect(configLoader.isAgentDisabled('disabled')).toBe(true);
+      expect(configLoader.isAgentDisabled('nonexistent')).toBe(false); // Default
     });
   });
+
+    describe('mergeConfig', () => {
+      it('should merge new config with existing config', () => {
+        // given
+        configLoader = new ConfigLoader();
+
+        // when
+        configLoader.mergeConfig({
+          agents: { agent1: { model: 'model1' } },
+          permissions: { test: ['read'] }
+        });
+
+        // then
+        const config = configLoader.getConfig();
+        expect(config.agents?.agent1).toEqual(expect.objectContaining({ model: 'model1' }));
+        expect(configLoader.hasPermission('test', 'read')).toBe(true);
+      });
+    });
 });

@@ -1,0 +1,48 @@
+// Example configuration file for my-opencode-plugin
+// This file demonstrates all the available configuration options
+
+{
+  "agents": {
+    "general": {
+      "description": "General purpose agent for answering questions and providing information",
+      "model": "gpt-4",
+      "temperature": 0.7,
+      "maxTokens": 4000,
+      "topP": 0.9,
+      "frequencyPenalty": 0.0,
+      "presencePenalty": 0.0
+    },
+    "explore": {
+      "description": "Code exploration agent for finding files and understanding codebases",
+      "model": "gpt-4",
+      "temperature": 0.3,
+      "disabled": true  // This agent is disabled by default
+    },
+    "code-reviewer": {
+      "description": "Code review agent for analyzing code quality and suggesting improvements",
+      "model": "gpt-4",
+      "temperature": 0.5,
+      "maxTokens": 8000,
+      "settings": {
+        "checkStyle": true,
+        "checkSecurity": true,
+        "checkPerformance": true
+      }
+    },
+    "greeting-responder": {
+      "description": "Agent for responding to user greetings with friendly messages",
+      "model": "gpt-3.5-turbo",
+      "temperature": 0.8,
+      "stream": true
+    }
+  },
+  "permissions": {
+    "general": ["read", "write", "execute"],
+    "code-reviewer": ["read"]
+  },
+  "background": {
+    "maxConcurrentTasks": 5,
+    "taskTTL": 300000,  // 5 minutes
+    "pollInterval": 3000  // 3 seconds
+  }
+}

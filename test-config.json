@@ -1,0 +1,25 @@
+{
+  "agents": {
+    "mistral (local)": {
+      "name": "mistral (local)",
+      "options": {
+        "baseURL": "https://indicator-durable-till-beverage.trycloudflare.com/v1",
+        "apiKey": "aa425ddd8b8e119a6aba335ddea758b715029a1bb1062afd492b7e564d994852"
+      },
+      "models": {
+        "mistralai/Devstral-Small-2-24B-Instruct-2512": {
+          "name": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+          "limit": {
+            "context": 127264,
+            "output": 65536
+          }
+        }
+      }
+    }
+  },
+  "background": {
+    "maxConcurrentTasks": 10,
+    "taskTTL": 1800000,
+    "pollInterval": 2000
+  }
+}

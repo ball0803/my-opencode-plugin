@@ -2,13 +2,23 @@ export type BackgroundTaskStatus = 'running' | 'completed' | 'error' | 'cancelle
 
 export interface BackgroundTask {
   id: string;
+  sessionID: string;
+  parentSessionID: string;
+  parentMessageID: string;
+  description: string;
+  prompt: string;
+  agent: string;
   status: BackgroundTaskStatus;
-  createdAt: number;
-  updatedAt: number;
-  options: any;
-  sessionId?: string;
-  result?: any;
+  startedAt: Date;
+  completedAt?: Date;
+  result?: string;
   error?: string;
+  progress?: TaskProgress;
+  parentModel?: { providerID: string; modelID: string };
+  createdAt?: number;
+  updatedAt?: number;
+  options?: any;
+  sessionId?: string;
   output?: string;
 }
 
@@ -75,4 +85,38 @@ export interface AgentCallResult {
   taskId?: string;
   result?: any;
   error?: string;
+}
+
+export interface LaunchInput {
+  description: string;
+  prompt: string;
+  agent: string;
+  parentSessionID: string;
+  parentMessageID: string;
+  parentModel?: { providerID: string; modelID: string };
+}
+
+export interface TaskProgress {
+  toolCalls: number;
+  lastTool?: string;
+  lastUpdate: Date;
+  lastMessage?: string;
+  lastMessageAt?: Date;
+}
+
+export interface BackgroundTask {
+  id: string;
+  sessionID: string;
+  parentSessionID: string;
+  parentMessageID: string;
+  description: string;
+  prompt: string;
+  agent: string;
+  status: 'running' | 'completed' | 'error' | 'cancelled';
+  startedAt: Date;
+  completedAt?: Date;
+  result?: string;
+  error?: string;
+  progress?: TaskProgress;
+  parentModel?: { providerID: string; modelID: string };
 }

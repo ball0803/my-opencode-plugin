@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { parse as parseJsonc } from 'jsonc-parser';
 import { PluginConfigSchema, DEFAULT_CONFIG } from './schema';
-import type { PluginConfig } from './schema';
+import type { PluginConfig, AgentConfig } from './schema';
 
 export class ConfigLoader {
   private config: PluginConfig;
@@ -30,8 +30,22 @@ export class ConfigLoader {
     return this.config;
   }
 
-  getAgentConfig(agentName: string): any {
+  getAgentConfig(agentName: string): AgentConfig | undefined {
     return this.config.agents?.[agentName];
+  }
+
+  getAvailableAgents(): string[] {
+    return Object.keys(this.config.agents || {});
+  }
+
+  isAgentAvailable(agentName: string): boolean {
+    const agents = this.getAvailableAgents();
+    return agents.includes(agentName);
+  }
+
+  isAgentDisabled(agentName: string): boolean {
+    const agentConfig = this.getAgentConfig(agentName);
+    return agentConfig?.disabled ?? false;
   }
 
   hasPermission(agentName: string, permission: string): boolean {

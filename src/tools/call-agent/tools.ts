@@ -60,6 +60,9 @@ export function createCallAgentTool(manager: BackgroundManager) {
 
     async callAgentDirectly(options: AgentCallOptions): Promise<AgentCallResult> {
       try {
+        // Validate agent before calling
+        manager.validateAgent(options.agent);
+        
         const result = await manager.callAgent(options.agent, options.prompt, options.options);
         return {
           result,

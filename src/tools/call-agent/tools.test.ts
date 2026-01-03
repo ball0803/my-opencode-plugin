@@ -21,7 +21,9 @@ describe('Call Agent Tools', () => {
     it('should call agent in foreground', async () => {
       // given
        const mockCallAgent = jest.fn().mockResolvedValue('agent response');
-       manager.callAgent = mockCallAgent as any;
+       const mockValidateAgent = jest.fn();
+      manager.callAgent = mockCallAgent as any;
+      manager.validateAgent = mockValidateAgent as any;
 
       const options = {
         agent: 'test-agent',
@@ -33,6 +35,7 @@ describe('Call Agent Tools', () => {
       const result = await tools.call_agent.execute(options);
 
       // then
+      expect(mockValidateAgent).toHaveBeenCalledWith('test-agent');
       expect(mockCallAgent).toHaveBeenCalledWith('test-agent', 'test prompt', undefined);
       expect(result.status).toBe('completed');
       expect(result.result).toBe('agent response');
@@ -57,7 +60,9 @@ describe('Call Agent Tools', () => {
     it('should handle agent errors', async () => {
       // given
        const mockCallAgent = jest.fn().mockRejectedValue(new Error('Agent error'));
-       manager.callAgent = mockCallAgent as any;
+       const mockValidateAgent = jest.fn();
+      manager.callAgent = mockCallAgent as any;
+      manager.validateAgent = mockValidateAgent as any;
 
       const options = {
         agent: 'test-agent',
