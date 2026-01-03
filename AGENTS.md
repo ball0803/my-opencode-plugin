@@ -94,6 +94,30 @@ bun run jest -t "list_agents tool"
 bun run jest -t "Agent Discovery"
 ```
 
+### Test Commands
+
+```bash
+bun run test       # Run all tests using Jest
+bun run test:watch # Run tests in watch mode
+bun run test:coverage # Run tests with coverage report
+bun run test:single # Run a specific test (use with -t flag)
+```
+
+### Running a Single Test
+
+To run a specific test file or test case:
+
+```bash
+# Run a specific test file
+bun run jest src/tools/agent-discovery/__tests__/tools.test.ts
+
+# Run a specific test by name
+bun run jest -t "list_agents tool"
+
+# Run tests matching a pattern
+bun run jest -t "Agent Discovery"
+```
+
 ### Test Configuration
 
 The project uses Jest with the following configuration:
