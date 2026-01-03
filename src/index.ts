@@ -7,6 +7,7 @@ import { ConfigLoader } from './config';
 import { createConfigHandler } from './plugin-handlers/config-handler';
 import type { PluginConfig } from './config/schema';
 import type { AgentSession } from './background-agent/types';
+import type { BackgroundManagerOptions } from './core/types';
 
 export interface PluginOptions {
   configPath?: string;

@@ -10,3 +10,4 @@ export function createBackgroundTaskTools(manager: BackgroundManager) {
 }
 
 export type { BackgroundTask, BackgroundTaskOptions, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult } from '../../background-agent/types';
+export type { BackgroundManager } from '../../background-agent/manager';

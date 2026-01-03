@@ -9,3 +9,4 @@ export function createCallAgentTools(manager: BackgroundManager) {
 }
 
 export type { AgentCallOptions, AgentCallResult } from '../../background-agent/types';
+export type { BackgroundManager } from '../../background-agent/manager';

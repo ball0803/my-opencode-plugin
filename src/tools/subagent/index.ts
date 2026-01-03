@@ -1,7 +1,5 @@
-import type { BackgroundManager } from '../../background-agent/manager';
+// Subagent tools index
 
-export function createSubagentTools(manager: BackgroundManager) {
-  return {
-    // Tools will be defined in tools.ts
-  };
-}
+export { createSubagentTools } from './tools';
+
+export type { BackgroundManager } from '../../background-agent/manager';
