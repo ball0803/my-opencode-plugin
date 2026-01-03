@@ -30,10 +30,10 @@ Generate hierarchical AGENTS.md files. Root + complexity-scored subdirectories.
 **TodoWrite ALL phases. Mark in_progress → completed in real-time.**
 ```
 TodoWrite([
-  { id: "discovery", content: "Fire explore agents + bash analysis + read existing", status: "pending", priority: "high" },
-  { id: "scoring", content: "Score directories, determine locations", status: "pending", priority: "high" },
-  { id: "generate", content: "Generate AGENTS.md files (root + subdirs)", status: "pending", priority: "high" },
-  { id: "review", content: "Deduplicate, validate, trim", status: "pending", priority: "medium" }
+  { id: "phase-1-discovery", content: "Fire explore agents + bash analysis + read existing", status: "pending", priority: "high" },
+  { id: "phase-2-scoring", content: "Score directories, determine locations", status: "pending", priority: "high" },
+  { id: "phase-3-generation", content: "Generate AGENTS.md files (root + subdirs)", status: "pending", priority: "high" },
+  { id: "phase-4-review", content: "Deduplicate, validate, trim", status: "pending", priority: "medium" }
 ])
 ```
 </critical>
@@ -41,6 +41,8 @@ TodoWrite([
 ---
 
 ## Phase 1: Discovery + Analysis (Concurrent)
+
+**TodoWrite ID:** `phase-1-discovery`
 
 **Mark "discovery" as in_progress.**
 
@@ -132,6 +134,8 @@ for each task_id: background_output(task_id="...")
 
 ## Phase 2: Scoring & Location Decision
 
+**TodoWrite ID:** `phase-2-scoring`
+
 **Mark "scoring" as in_progress.**
 
 ### Scoring Matrix
@@ -168,6 +172,8 @@ AGENTS_LOCATIONS = [
 ---
 
 ## Phase 3: Generate AGENTS.md
+
+**TodoWrite ID:** `phase-3-generation`
 
 **Mark "generate" as in_progress.**
 
@@ -240,6 +246,8 @@ for loc in AGENTS_LOCATIONS (except root):
 ---
 
 ## Phase 4: Review & Deduplicate
+
+**TodoWrite ID:** `phase-4-review`
 
 **Mark "review" as in_progress.**
 

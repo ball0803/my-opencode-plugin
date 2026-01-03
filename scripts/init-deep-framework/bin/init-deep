@@ -1,0 +1,96 @@
+#!/usr/bin/env node
+
+const { Command } = require('commander');
+const { discoverProject, analyzeProject } = require('./lib/discovery');
+const { scoreDirectories } = require('./lib/scoring');
+const { generateAgentsFiles } = require('./lib/generation');
+const { reviewAndValidate } = require('./lib/review');
+const { loadConfig, saveConfig } = require('./lib/config');
+const { TodoWrite } = require('./lib/todowrite');
+
+const program = new Command();
+
+program
+  .name('init-deep')
+  .description('Generate AGENTS.md files for your project')
+  .version('1.0.0')
+  .option('-u, --update', 'Update existing AGENTS.md files')
+  .option('-c, --create', 'Create new AGENTS.md files only')
+  .option('-d, --dry-run', 'Show what would be generated without writing files')
+  .option('-v, --verbose', 'Show detailed progress information')
+  .option('-w, --workers <number>', 'Number of parallel workers', '4')
+  .option('-s, --scoring-config <file>', 'Custom scoring configuration file')
+  .option('-o, --output-dir <dir>', 'Output directory for generated files')
+  .option('-t, --todo-file <file>', 'Todo file for tracking progress')
+  .option('-p, --project-root <dir>', 'Project root directory')
+  .option('-m, --max-depth <number>', 'Maximum directory depth to analyze', '5');
+
+program.action(async (options) => {
+  try {
+    const todoWrite = new TodoWrite(options.todoFile || 'AGENTS.md');
+    const config = loadConfig(options.scoringConfig);
+    
+    // Phase 1: Discovery
+    todoWrite.updateTodo([
+      { content: 'Phase 1: Discovery', status: 'in_progress', priority: 'high', id: 'discovery' },
+      { content: 'Phase 2: Scoring', status: 'pending', priority: 'high', id: 'scoring' },
+      { content: 'Phase 3: Generation', status: 'pending', priority: 'high', id: 'generation' },
+      { content: 'Phase 4: Review', status: 'pending', priority: 'high', id: 'review' }
+    ]);
+    
+    const projectRoot = options.projectRoot || process.cwd();
+    const discoveryResult = await discoverProject(projectRoot, {
+      maxDepth: parseInt(options.maxDepth),
+      verbose: options.verbose,
+      workers: parseInt(options.workers)
+    });
+    
+    todoWrite.updateTodo([
+      { content: 'Phase 1: Discovery', status: 'completed', priority: 'high', id: 'discovery' },
+      { content: 'Phase 2: Scoring', status: 'in_progress', priority: 'high', id: 'scoring' }
+    ]);
+    
+    // Phase 2: Scoring
+    const scoringResult = await scoreDirectories(discoveryResult, config.scoring);
+    
+    todoWrite.updateTodo([
+      { content: 'Phase 2: Scoring', status: 'completed', priority: 'high', id: 'scoring' },
+      { content: 'Phase 3: Generation', status: 'in_progress', priority: 'high', id: 'generation' }
+    ]);
+    
+    // Phase 3: Generation
+    const generationResult = await generateAgentsFiles(scoringResult, {
+      update: options.update,
+      create: options.create,
+      dryRun: options.dryRun,
+      outputDir: options.outputDir,
+      verbose: options.verbose
+    });
+    
+    todoWrite.updateTodo([
+      { content: 'Phase 3: Generation', status: 'completed', priority: 'high', id: 'generation' },
+      { content: 'Phase 4: Review', status: 'in_progress', priority: 'high', id: 'review' }
+    ]);
+    
+    // Phase 4: Review
+    const reviewResult = await reviewAndValidate(generationResult, {
+      dryRun: options.dryRun,
+      verbose: options.verbose
+    });
+    
+    todoWrite.updateTodo([
+      { content: 'Phase 4: Review', status: 'completed', priority: 'high', id: 'review' }
+    ]);
+    
+    console.log('\n✅ init-deep completed successfully!');
+    console.log(`Generated ${reviewResult.filesCreated} files`);
+    console.log(`Updated ${reviewResult.filesUpdated} files`);
+    console.log(`Validated ${reviewResult.filesValidated} files`);
+    
+  } catch (error) {
+    console.error('\n❌ Error during init-deep:', error.message);
+    process.exit(1);
+  }
+});
+
+program.parse(process.argv);
