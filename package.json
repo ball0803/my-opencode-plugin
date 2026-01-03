@@ -12,7 +12,9 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:single": "jest -t",
-    "test:update": "jest -u"
+    "test:update": "jest -u",
+    "install:commands": "bash scripts/install-command.sh",
+    "uninstall:commands": "bash scripts/uninstall-command.sh"
   },
   "keywords": [
     "opencode",
@@ -21,6 +23,15 @@
     "agent",
     "task"
   ],
+  "opencode": {
+    "commands": [
+      {
+        "name": "init-deep",
+        "path": "commands/init-deep.md",
+        "description": "Generate hierarchical AGENTS.md files. Root + complexity-scored subdirectories."
+      }
+    ]
+  },
   "author": "",
   "license": "MIT",
   "dependencies": {

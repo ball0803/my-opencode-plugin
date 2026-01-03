@@ -47,6 +47,32 @@ Comprehensive documentation is available in the `/docs` directory:
 - **Development**: Development setup and guidelines
 - **Contributing**: How to contribute to the project
 
+## Commands
+
+This plugin includes OpenCode commands that extend functionality:
+
+### `/init-deep`
+
+Generate hierarchical AGENTS.md files with complexity scoring.
+
+**Installation**:
+```bash
+npm run install:commands
+```
+
+**Usage**:
+```bash
+/init-deep                      # Update mode
+/init-deep --create-new         # Regenerate from scratch
+/init-deep --max-depth=2        # Limit depth
+```
+
+See `commands/README.md` for more details.
+
+## License
+
+MIT
+
 ## Development
 
 ### Prerequisites
