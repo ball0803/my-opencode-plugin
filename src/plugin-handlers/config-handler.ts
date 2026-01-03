@@ -1,4 +1,8 @@
-import type { ConfigHandler } from 'opencode';
+export type ConfigHandler = {
+  name: string;
+  description: string;
+  handle(config: any): Promise<any>;
+};
 import { ConfigLoader } from '../config';
 import type { PluginConfig } from '../config/schema';
 

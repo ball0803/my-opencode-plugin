@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./src"],
+    "typeRoots": ["./node_modules/@types", "./src"],
     "target": "ESNext",
     "module": "Node16",
     "moduleResolution": "node16",
@@ -14,7 +14,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "lib": ["ESNext", "DOM"],
-    "types": []
+    "types": ["node"]
   },
   "include": ["src/**/*", "types.d.ts"],
   "exclude": ["node_modules", "dist", "src/**/*.test.ts"]

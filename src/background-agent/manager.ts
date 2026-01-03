@@ -5,7 +5,7 @@ export class BackgroundManager {
   private session: AgentSession | null = null;
   private options: BackgroundManagerOptions;
   private isPolling: boolean = false;
-  private pollingInterval: NodeJS.Timeout | null = null;
+  private pollingInterval: any = null;
   private notifications: Map<string, BackgroundTask[]> = new Map();
   private TASK_TTL_MS: number = 30 * 60 * 1000;
 

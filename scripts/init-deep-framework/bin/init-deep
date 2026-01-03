@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 const { Command } = require('commander');
-const { discoverProject, analyzeProject } = require('./lib/discovery');
-const { scoreDirectories } = require('./lib/scoring');
-const { generateAgentsFiles } = require('./lib/generation');
-const { reviewAndValidate } = require('./lib/review');
-const { loadConfig, saveConfig } = require('./lib/config');
-const { TodoWrite } = require('./lib/todowrite');
+const { discoverProject, analyzeProject } = require('/home/camel/Desktop/Project/yaocp/my-opencode-plugin/scripts/init-deep-framework/lib/discovery');
+const { scoreDirectories } = require('/home/camel/Desktop/Project/yaocp/my-opencode-plugin/scripts/init-deep-framework/lib/scoring');
+const { generateAgentsFiles } = require('/home/camel/Desktop/Project/yaocp/my-opencode-plugin/scripts/init-deep-framework/lib/generation');
+const { reviewAndValidate } = require('/home/camel/Desktop/Project/yaocp/my-opencode-plugin/scripts/init-deep-framework/lib/review');
+const { loadConfig, saveConfig } = require('/home/camel/Desktop/Project/yaocp/my-opencode-plugin/scripts/init-deep-framework/lib/config');
+const { TodoWrite } = require('/home/camel/Desktop/Project/yaocp/my-opencode-plugin/scripts/init-deep-framework/lib/todowrite');
 
 const program = new Command();
 

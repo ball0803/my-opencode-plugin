@@ -10,7 +10,16 @@ Background agent orchestration system for OpenCode plugins. Provides async task 
 
 ## STRUCTURE
 
-
+```
+my-opencode-plugin/
+├── src/
+│   ├── background-agent/  # Task lifecycle
+│   ├── core/              # Types, utilities
+│   ├── tools/             # Custom tools
+├── commands/              # CLI commands
+├── docs/                  # Documentation
+└── scripts/               # Build scripts
+```
 
 ## WHERE TO LOOK
 
@@ -38,45 +47,11 @@ Background agent orchestration system for OpenCode plugins. Provides async task 
 
 ## COMMANDS
 
-error TS6231: Could not resolve the path '#' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'Build' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'Jest' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'Run' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'TypeScript' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'Watch' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'bun' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'mode' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'run' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'test' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'test:watch' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'tests' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
-error TS6231: Could not resolve the path 'with' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
-  The file is in the program because:
-    Root file specified for compilation
+```bash
+npm run build          # Build TypeScript
+npm test               # Run Jest tests
+npm run test:watch     # Watch mode
+```
 
 ## NOTES
 

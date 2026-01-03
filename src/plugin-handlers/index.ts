@@ -1,5 +1,4 @@
-import { createConfigHandler } from './config-handler';
-import type { ConfigHandler } from 'opencode';
+import { createConfigHandler, ConfigHandler } from './config-handler';
 
 export function createPluginHandlers(configLoader: any): ConfigHandler[] {
   return [
@@ -7,4 +6,4 @@ export function createPluginHandlers(configLoader: any): ConfigHandler[] {
   ];
 }
 
-export type { ConfigHandler } from 'opencode';
+export type { ConfigHandler } from './config-handler';

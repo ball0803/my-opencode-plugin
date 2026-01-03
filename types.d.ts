@@ -8,14 +8,6 @@ declare module 'fs' {
   export function existsSync(path: string): boolean;
 }
 
-declare module 'path' {
-  export function join(...paths: string[]): string;
-}
-
-declare module 'jsonc-parser' {
-  export function parse(text: string, options?: any): any;
-}
-
 export interface AgentSession {
   id: string;
   getStatus(): Promise<string>;
@@ -31,10 +23,23 @@ export interface PluginConfig {
   [key: string]: any;
 }
 
-export interface ConfigHandler {
-  name: string;
-  description: string;
-  handle(config: any): Promise<any>;
+declare module 'opencode' {
+  export interface ConfigHandler {
+    name: string;
+    description: string;
+    handle(config: any): Promise<any>;
+  }
+  
+  export interface AgentSession {
+    id: string;
+    getStatus(): Promise<string>;
+    sendMessage(message: any): Promise<void>;
+    todoWrite(options: any): Promise<void>;
+    glob(options: any): Promise<string[]>;
+    grep(options: any): Promise<any[]>;
+    read(options: any): Promise<string>;
+    write(options: any): Promise<void>;
+  }
 }
 
 export interface Tool {
