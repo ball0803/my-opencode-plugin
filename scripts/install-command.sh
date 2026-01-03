@@ -11,6 +11,7 @@ echo ""
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 COMMAND_DIR="$PLUGIN_DIR/commands"
+SCRIPTS_DIR="$PLUGIN_DIR/scripts"
 TARGET_DIR="$HOME/.config/opencode/command"
 
 # Create target directory if it doesn't exist
@@ -27,16 +28,27 @@ else
     exit 1
 fi
 
+# Install the implementation script
+SCRIPT_FILE="$SCRIPTS_DIR/init-deep.sh"
+if [ -f "$SCRIPT_FILE" ]; then
+    chmod +x "$SCRIPT_FILE"
+    echo "✓ Installed script: $SCRIPT_FILE"
+else
+    echo "✗ Error: Script file not found: $SCRIPT_FILE"
+    exit 1
+fi
+
 # Verify installation
 echo ""
 echo "🔍 Verifying installation..."
-if [ -f "$TARGET_DIR/init-deep.md" ]; then
+if [ -f "$TARGET_DIR/init-deep.md" ] && [ -f "$SCRIPT_FILE" ]; then
     echo "✓ Command successfully installed!"
     echo ""
     echo "📋 Command Details:"
     echo "  Name: /init-deep"
     echo "  Description: Generate hierarchical AGENTS.md files"
     echo "  Location: $TARGET_DIR/init-deep.md"
+    echo "  Script: $SCRIPT_FILE"
     echo ""
     echo "🚀 Usage:"
     echo "  Type '/init-deep' in OpenCode to use the command"
