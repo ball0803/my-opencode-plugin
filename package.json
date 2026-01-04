@@ -29,13 +29,17 @@
         "name": "init-deep",
         "path": "commands/init-deep.md",
         "description": "Generate hierarchical AGENTS.md files. Root + complexity-scored subdirectories."
+      },
+      {
+        "name": "mcp",
+        "path": "commands/mcp.md",
+        "description": "Configure MCP servers for OpenCode"
       }
     ]
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.25.1",
     "commander": "^14.0.2",
     "jsonc-parser": "^3.2.0",
     "my-opencode-plugin": "file:my-opencode-plugin-1.0.0.tgz",

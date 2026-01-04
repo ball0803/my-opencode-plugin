@@ -6,7 +6,7 @@
 
 ## OVERVIEW
 
-Background agent orchestration system for OpenCode plugins with MCP (Model Context Protocol) support. Provides async task management, agent discovery, tool integration, and remote MCP server connectivity.
+Background agent orchestration system for OpenCode plugins. Provides async task management, agent discovery, tool integration, and MCP server configuration support.
 
 ## STRUCTURE
 
@@ -15,37 +15,35 @@ my-opencode-plugin/
 ├── src/
 │   ├── background-agent/  # Task lifecycle and orchestration
 │   ├── core/              # Types, utilities
-│   ├── tools/             # Custom tools (MCP, background task, agent tools)
-│   │   └── mcp/           # MCP tool implementation
-│   ├── features/          # Feature modules
-│   │   ├── mcp-loader/    # MCP configuration loader
-│   │   ├── mcp-manager/   # MCP client manager
-│   ├── mcp/              # Built-in MCP servers
-│   │   ├── context7.ts    # Context7 MCP server
-│   │   ├── websearch-exa.ts # Exa web search MCP server
-│   │   ├── grep-app.ts    # grep.app MCP server
-│   │   └── index.ts       # MCP server management
+│   ├── tools/             # Custom tools (background task, agent tools)
 │   ├── config/            # Configuration system
 │   └── plugin-handlers/   # Plugin configuration handlers
 ├── commands/              # CLI commands
 ├── docs/                  # Documentation
-└── scripts/               # Build scripts
+└── scripts/               # Build and test scripts
+    ├── test/              # Test scripts
+    │   ├── init-deep.test.sh
+    │   ├── jest.config.js
+    │   └── run-all-tests.js
+    └── verify/            # Verification scripts
+        └── mcp-helper.sh  # MCP configuration helper
 ```
 
 ## WHERE TO LOOK
 
-| Task | Location | Notes |
-|------|----------|-------|
-| **Add task type** | `src/background-agent/types.ts` | Define new task types |
-| **Add tool** | `src/tools/` | Create tool directory |
-| **Add MCP server** | `src/mcp/` | Add new built-in server |
-| **Add MCP config** | `src/features/mcp-loader/` | Update loader |
-| **Add handler** | `src/plugin-handlers/` | Create handler file |
-| **Add config** | `src/config/` | Update schema |
-| **Add docs** | `docs/` | Follow documentation structure |
-| **MCP tool** | `src/tools/mcp/` | `mcp` tool implementation |
-| **MCP manager** | `src/features/mcp-manager/` | Client connections |
-| **MCP loader** | `src/features/mcp-loader/` | Config loading |
+| Task                | Location                          | Notes                             |
+| ------------------- | --------------------------------- | --------------------------------- |
+| **Add task type**   | `src/background-agent/types.ts`   | Define new task types             |
+| **Add tool**        | `src/tools/`                      | Create tool directory             |
+| **Add MCP server**  | `src/mcp/`                        | Add new built-in server           |
+| **Add MCP config**  | `src/features/mcp-loader/`        | Update loader                     |
+| **Add handler**     | `src/plugin-handlers/`            | Create handler file               |
+| **Add config**      | `src/config/`                     | Update schema                     |
+| **Add docs**        | `docs/`                           | Follow documentation structure    |
+| **Add test script** | `scripts/test/`                   | Place test scripts here           |
+| **MCP tool**        | `scripts/mcp-helper.sh`           | MCP configuration helper          |
+| **MCP manager**     | Uses OpenCode's native MCP system | No separate implementation needed |
+| **MCP loader**      | Uses OpenCode's native MCP system | No separate implementation needed |
 
 ## CONVENTIONS
 
@@ -82,34 +80,63 @@ bun run clean         # Remove dist/
 
 ## MCP FEATURES
 
-### Built-in Servers
-- **Context7**: AI-powered context-aware search
-- **Exa Web Search**: Web search capabilities
-- **grep.app**: Code search and navigation
-
 ### Configuration
-Create `.mcp.json` in your project:
-```json
-{
-  "mcpServers": {
-    "my-server": {
-      "type": "remote",
-      "url": "https://example.com/mcp"
-    }
-  }
-}
+
+Use the `/mcp` command to configure MCP servers:
+
+```bash
+/mcp --add context7  # Add Context7 MCP server
+/mcp --add grep      # Add Grep by Vercel MCP server
+/mcp --add sentry    # Add Sentry MCP server
+/mcp --list          # List configured MCP servers
 ```
 
 ### Usage
-```typescript
-// Call an MCP tool
-mcp(mcp_name="websearch_exa", tool_name="web_search_exa", arguments='{"query": "search"}')
 
-// Read a resource
-mcp(mcp_name="grep_app", resource_name="file://path/to/file")
+MCP servers are automatically available as tools in OpenCode. Mention the server name in your prompts:
 
-// Get a prompt
-mcp(mcp_name="context7", prompt_name="summarize", arguments='{"text": "..."}')
+```
+Search for React documentation. use context7
+Find code examples for useEffect. use gh_grep
+```
+
+### Examples
+
+#### Context7
+
+```bash
+/mcp --add context7
+```
+
+Then use in prompts:
+
+```
+How to implement authentication in Next.js? use context7
+```
+
+#### Grep by Vercel
+
+```bash
+/mcp --add grep
+```
+
+Then use in prompts:
+
+```
+Show me examples of custom hooks in React. use gh_grep
+```
+
+#### Sentry
+
+```bash
+/mcp --add sentry
+/mcp --auth sentry  # Authenticate with OAuth
+```
+
+Then use in prompts:
+
+```
+Show me recent errors in my project. use sentry
 ```
 
 ## NOTES
@@ -126,6 +153,6 @@ mcp(mcp_name="context7", prompt_name="summarize", arguments='{"text": "..."}')
 - **AGENTS.md**: High-level overview and quick reference
 - **docs/ folder**: Detailed documentation, guides, and references
 - **README.md**: Installation and quick start
-- **MCP_*.md**: MCP-specific documentation
+- **MCP\_\*.md**: MCP-specific documentation
 
 For detailed documentation, see the `docs/` folder in this directory.
