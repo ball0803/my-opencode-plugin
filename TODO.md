@@ -2,7 +2,15 @@
 
 ## Next Steps
 
-### 1. Integration Testing
+### 1. MCP Implementation Testing
+- [ ] Test MCP tool with built-in servers
+- [ ] Test MCP configuration loading from .mcp.json
+- [ ] Test MCP connection management
+- [ ] Test MCP tool/resource/prompt operations
+- [ ] Test error handling for MCP operations
+- [ ] Test MCP with custom user configurations
+
+### 2. Integration Testing
 - [ ] Set up test environment with OpenCode
 - [ ] Install plugin and verify loading
 - [ ] Test background task functionality
@@ -33,12 +41,16 @@
 - [ ] Add retry logic for failed tasks
 - [ ] Better error messages for users
 - [ ] Logging improvements
+- [ ] MCP connection error handling
+- [ ] MCP timeout handling
 
 ### 4. Optional Features
 - [ ] Add hooks for custom behavior
 - [ ] Implement advanced task scheduling
 - [ ] Add progress tracking
 - [ ] Support for task dependencies
+- [ ] Additional built-in MCP servers
+- [ ] MCP server health monitoring
 
 ### 5. Packaging
 - [ ] Prepare for npm publication
@@ -59,6 +71,12 @@
 - ✅ Background task tools implemented
 - ✅ Agent calling tool implemented
 - ✅ Configuration system working
+- ✅ MCP (Model Context Protocol) support implemented
+  - ✅ Built-in MCP servers (Context7, Exa, grep.app)
+  - ✅ MCP configuration loader
+  - ✅ MCP client manager
+  - ✅ MCP tool integration
+  - ✅ Support for .mcp.json files
 - ✅ All tests passing (27/27)
 - ✅ TypeScript compilation successful
 - ✅ Build output in dist/ directory
@@ -66,6 +84,7 @@
 - ✅ Code style guidelines documented
 - ✅ Build and test commands documented
 - ✅ Testing best practices documented
+- ✅ MCP implementation documentation created
 
 ## Notes
 
@@ -74,3 +93,5 @@
 - Modular architecture for easy maintenance
 - Type-safe with Zod validation
 - JSONC support for configuration
+- MCP support integrated with @modelcontextprotocol/sdk
+- Supports both local and remote MCP servers

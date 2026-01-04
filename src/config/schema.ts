@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export const McpNameSchema = z.enum(["websearch_exa", "context7", "grep_app"]);
+
 export const AgentConfigSchema = z.object({
   description: z.string().optional(),
   disabled: z.boolean().default(false),
@@ -24,10 +26,12 @@ export const PluginConfigSchema = z.object({
   agents: z.record(AgentConfigSchema).default({}),
   permissions: z.record(z.array(z.string())).optional(),
   background: BackgroundConfigSchema.optional(),
+  disabled_mcps: z.array(McpNameSchema).default([]),
 });
 
 export type AgentConfig = z.infer<typeof AgentConfigSchema>;
 export type BackgroundConfig = z.infer<typeof BackgroundConfigSchema>;
+export type McpName = z.infer<typeof McpNameSchema>;
 export type PluginConfig = z.infer<typeof PluginConfigSchema>;
 
 export const DEFAULT_CONFIG: PluginConfig = {
@@ -38,4 +42,5 @@ export const DEFAULT_CONFIG: PluginConfig = {
     taskTTL: 30 * 60 * 1000,
     pollInterval: 2000,
   },
+  disabled_mcps: [],
 };
