@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const McpNameSchema = z.enum(["websearch_exa", "context7", "grep_app"]);
+export const McpNameSchema = z.enum(['searxng', 'context7', 'grep_app']);
 
 export const AgentConfigSchema = z.object({
   description: z.string().optional(),
@@ -18,7 +18,11 @@ export const AgentConfigSchema = z.object({
 
 export const BackgroundConfigSchema = z.object({
   maxConcurrentTasks: z.number().min(1).max(100).default(10),
-  taskTTL: z.number().min(60000).max(86400000).default(30 * 60 * 1000),
+  taskTTL: z
+    .number()
+    .min(60000)
+    .max(86400000)
+    .default(30 * 60 * 1000),
   pollInterval: z.number().min(1000).max(30000).default(2000),
 });
 

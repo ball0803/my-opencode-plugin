@@ -41,7 +41,8 @@ my-opencode-plugin/
 | **Add config**      | `src/config/`                     | Update schema                     |
 | **Add docs**        | `docs/`                           | Follow documentation structure    |
 | **Add test script** | `scripts/test/`                   | Place test scripts here           |
-| **MCP tool**        | `scripts/mcp-helper.sh`           | MCP configuration helper          |
+| **MCP tool**        | `scripts/verify/mcp-helper.sh`    | MCP configuration helper          |
+| **MCP install**     | `scripts/verify/mcp-install.sh`   | MCP server installation           |
 | **MCP manager**     | Uses OpenCode's native MCP system | No separate implementation needed |
 | **MCP loader**      | Uses OpenCode's native MCP system | No separate implementation needed |
 
@@ -76,6 +77,16 @@ bun run typecheck     # TypeScript validation
 
 # Clean
 bun run clean         # Remove dist/
+
+# MCP Installation
+bash scripts/verify/mcp-install.sh install searxng   # Install SearXNG
+bash scripts/verify/mcp-install.sh install context7  # Install Context7
+bash scripts/verify/mcp-install.sh install gh_grep   # Install Grep by Vercel
+bash scripts/verify/mcp-install.sh install octocode  # Install Octocode
+bash scripts/verify/mcp-install.sh install all       # Install all MCP servers
+bash scripts/verify/mcp-install.sh uninstall <name>  # Uninstall MCP server
+bash scripts/verify/mcp-install.sh verify            # Verify MCP installation
+bash scripts/verify/mcp-install.sh status            # Show MCP server status
 ```
 
 ## MCP FEATURES
@@ -85,9 +96,10 @@ bun run clean         # Remove dist/
 Use the `/mcp` command to configure MCP servers:
 
 ```bash
+/mcp --add searxng   # Add SearXNG MCP server
 /mcp --add context7  # Add Context7 MCP server
-/mcp --add grep      # Add Grep by Vercel MCP server
-/mcp --add sentry    # Add Sentry MCP server
+/mcp --add gh_grep   # Add Grep by Vercel MCP server
+/mcp --add octocode  # Add Octocode MCP server
 /mcp --list          # List configured MCP servers
 ```
 
@@ -96,11 +108,23 @@ Use the `/mcp` command to configure MCP servers:
 MCP servers are automatically available as tools in OpenCode. Mention the server name in your prompts:
 
 ```
-Search for React documentation. use context7
+Search for React documentation. use searxng
 Find code examples for useEffect. use gh_grep
 ```
 
 ### Examples
+
+#### SearXNG
+
+```bash
+/mcp --add searxng
+```
+
+Then use in prompts:
+
+```
+Search for React documentation. use searxng
+```
 
 #### Context7
 
@@ -117,7 +141,7 @@ How to implement authentication in Next.js? use context7
 #### Grep by Vercel
 
 ```bash
-/mcp --add grep
+/mcp --add gh_grep
 ```
 
 Then use in prompts:
@@ -126,17 +150,16 @@ Then use in prompts:
 Show me examples of custom hooks in React. use gh_grep
 ```
 
-#### Sentry
+#### Octocode
 
 ```bash
-/mcp --add sentry
-/mcp --auth sentry  # Authenticate with OAuth
+/mcp --add octocode
 ```
 
 Then use in prompts:
 
 ```
-Show me recent errors in my project. use sentry
+Find examples of authentication in Next.js. use octocode
 ```
 
 ## NOTES
@@ -147,6 +170,17 @@ Show me recent errors in my project. use sentry
 - **MCP**: Supports both local (stdio) and remote (http/sse) servers
 - **Configuration**: JSONC support with multiple scopes (user, project, local)
 - **Documentation**: Long-form documentation belongs in `docs/` folder
+- **MCP Installation**: Use `scripts/verify/mcp-install.sh` for server management
+- **Debugging**: When debugging OpenCode, use the `-m` flag to specify the model:
+  ```bash
+  opencode -m "mistral (local)/mistralai/Devstral-Small-2-24B-Instruct-2512"
+  ```
+- **Testing**: Always use the `-c` flag to continue the last session when testing:
+  ```bash
+  opencode -c
+  ```
+  NEVER kill the OpenCode process. Always use the `-c` flag to continue the last session.
+- **Command Execution**: Always use the `-m` flag when running OpenCode commands. If you forget, always run `opencode --help` first to check available options.
 
 ## DOCUMENTATION CONVENTIONS
 

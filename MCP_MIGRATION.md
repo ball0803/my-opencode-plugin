@@ -23,6 +23,7 @@ The plugin has been updated to use OpenCode's **native MCP system** instead of m
 Use the `/mcp` command in OpenCode:
 
 ```bash
+/mcp --add searxng   # Add SearXNG MCP server
 /mcp --add context7  # Add Context7 MCP server
 /mcp --add grep      # Add Grep by Vercel MCP server
 /mcp --add sentry    # Add Sentry MCP server
@@ -30,15 +31,17 @@ Use the `/mcp` command in OpenCode:
 
 ### 2. Authenticate (if needed)
 
-Some servers require OAuth authentication:
+Some servers require authentication:
 
 ```bash
+/mcp --auth searxng  # If your SearXNG instance requires authentication
 /mcp --auth context7
 ```
 
 Or use the CLI:
 
 ```bash
+opencode mcp auth searxng
 opencode mcp auth context7
 ```
 
@@ -47,7 +50,7 @@ opencode mcp auth context7
 MCP servers are automatically available as tools:
 
 ```
-Search for React documentation. use context7
+Search for React documentation. use searxng
 Find code examples for useEffect. use gh_grep
 Show me recent errors. use sentry
 ```
@@ -60,6 +63,19 @@ Show me recent errors. use sentry
 4. **Standard Workflow**: Follows OpenCode's official MCP documentation
 
 ## Configuration Examples
+
+### SearXNG
+
+```json
+{
+  "mcp": {
+    "searxng": {
+      "type": "remote",
+      "url": "http://searxng.internal"
+    }
+  }
+}
+```
 
 ### Context7
 

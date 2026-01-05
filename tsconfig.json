@@ -14,7 +14,8 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "lib": ["ESNext", "DOM"],
-    "types": ["node"]
+    "types": ["node"],
+    "isolatedModules": true
   },
   "include": ["src/**/*", "types.d.ts"],
   "exclude": ["node_modules", "dist", "src/**/*.test.ts"]

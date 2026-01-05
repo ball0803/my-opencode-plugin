@@ -3,6 +3,7 @@ import { createBackgroundTaskTools } from './tools/background-task';
 import { createCallAgentTools } from './tools/call-agent';
 import { createSubagentTools } from './tools/subagent';
 import { createAgentDiscoveryTools } from './tools/agent-discovery';
+import { createAstGrepTools } from './tools/ast-grep';
 import { ConfigLoader } from './config';
 import { createConfigHandler } from './plugin-handlers/config-handler';
 import type { PluginConfig } from './config/schema';
@@ -45,6 +46,7 @@ export class MyOpenCodePlugin {
       ...createCallAgentTools(this.backgroundManager),
       ...createSubagentTools(this.backgroundManager),
       ...createAgentDiscoveryTools(this.backgroundManager),
+      ...createAstGrepTools(),
     };
   }
 
