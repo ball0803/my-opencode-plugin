@@ -1,118 +1,176 @@
 # My-OpenCode-Plugin
 
-A modular OpenCode plugin for background task management, agent calling, and skill-based MCP integration.
+A modular OpenCode plugin with 17 lifecycle hooks for enhanced functionality, background task management, agent orchestration, and MCP (Model Context Protocol) support.
 
 ## Features
 
-- **Background Task Management**: Create, monitor, and manage long-running tasks
-- **Agent Calling**: Call specialized agents with optional background execution
-- **Skill System**: 7 pre-built skills for MCP integration (official docs, code examples, repository analysis, web scraping, research, package research, PR analysis)
-- **Configurable**: Customize behavior through configuration files
-- **Type-Safe**: Strong TypeScript typing throughout
-- **Tested**: Comprehensive test coverage with Jest
+### Core Features
+
+- **17 Lifecycle Hooks**: Extend and customize OpenCode behavior
+- **Background Task Management**: Create, monitor, and manage long-running tasks with polling
+- **Agent Orchestration**: Call specialized agents with optional background execution
+- **MCP Support**: Model Context Protocol integration with built-in servers
+- **Configuration System**: JSONC support with multiple scopes
+- **Type Safety**: Zod validation for all configurations
+- **Error Recovery**: Automatic recovery from operation failures
+
+### Lifecycle Hooks (17 Total)
+
+#### Directory Hooks
+- `directory-agents-injector` - Auto-injects AGENTS.md content into task context
+- `directory-readme-injector` - Auto-injects README.md content into task context
+
+#### Task Management Hooks
+- `ralph-loop` - Self-referential development loops for iterative tasks
+- `empty-task-response-detector` - Detects when tasks complete without output
+- `tool-output-truncator` - Truncates long tool outputs to prevent context overflow
+
+#### Error Handling Hooks
+- `edit-error-recovery` - Recovers from edit operation failures
+- `empty-message-sanitizer` - Removes empty messages from session history
+
+#### Context Hooks
+- `compaction-context-injector` - Preserves context during session compaction
+- `keyword-detector` - Detects keywords in outputs and triggers actions
+- `rules-injector` - Injects rules into prompts for consistent behavior
+
+#### Notification Hooks
+- `session-notification` - Notifies about session lifecycle events
+- `background-notification` - Handles background task completion notifications
+
+#### Prompt Hooks
+- `auto-slash-command` - Auto-detects and handles slash commands
+- `thinking-mode` - Adds thinking prefixes to prompts for better context
+
+#### Session Hooks
+- `interactive-bash-session` - Handles interactive bash session commands
+- `comment-checker` - Prevents excessive comments in code edits
 
 ## Installation
 
-### Plugin Installation
+### Quick Install
+
+Run the simple installation script:
 
 ```bash
-npm install my-opencode-plugin
+./install-plugin-simple.sh
 ```
 
-### Skill Installation
+This will:
+1. Build the plugin if needed
+2. Copy the built files to `~/.config/opencode/plugin/my-opencode-plugin/`
+3. Create a `package.json` for dependencies
 
-The plugin includes 7 pre-built skills. To install them:
+### Manual Install
 
-```bash
-# Install skills to OpenCode
-mkdir -p ~/.config/opencode/skills/my-opencode-plugin
-cp -r node_modules/my-opencode-plugin/skills/* ~/.config/opencode/skills/my-opencode-plugin/
-```
+1. **Build the plugin**:
+   ```bash
+   cd my-opencode-plugin
+   bun install
+   npx tsc
+   ```
 
-This follows the OpenCode skill discovery pattern where skills are organized by plugin name in subdirectories.
+2. **Copy to OpenCode plugin directory**:
+   ```bash
+   mkdir -p ~/.config/opencode/plugin/my-opencode-plugin
+   cp -r dist/* ~/.config/opencode/plugin/my-opencode-plugin/
+   ```
+
+3. **Install dependencies**:
+   ```bash
+   cd ~/.config/opencode
+   bun install
+   ```
+
+4. **Verify installation**:
+   ```bash
+   ls -la ~/.config/opencode/plugin/my-opencode-plugin/
+   ```
 
 ## Usage
 
 ### Plugin Configuration
 
-Add the plugin to your `opencode.json` configuration:
+The plugin supports configuration through `.mcp.json` files. Create a file in your project root:
 
 ```json
 {
-  "plugins": [
-    {
-      "name": "my-opencode-plugin",
-      "config": {
-        "background": {
-          "maxConcurrentTasks": 10,
-          "taskTTL": 1800000,
-          "pollInterval": 2000
-        }
-      }
+  "mcpServers": {
+    "websearch_exa": {
+      "type": "remote",
+      "url": "https://api.exa.ai/mcp"
+    },
+    "grep_app": {
+      "type": "remote",
+      "url": "https://api.grep.app/mcp"
     }
-  ]
+  }
 }
 ```
 
-### Skill Usage
+### MCP Tool Usage
 
-Once skills are installed, use them in OpenCode:
+```typescript
+// Call a tool
+mcp(mcp_name="websearch_exa", tool_name="web_search_exa", arguments='{"query": "search"}')
 
-```bash
-# List available skills
-skill()
+// Read a resource
+mcp(mcp_name="grep_app", resource_name="file://path/to/file")
 
-# Load a specific skill
-skill(name="official-docs")
-
-# Use MCP tools from skills
-mcp(mcp_name="context7", tool_name="resolve-library-id", arguments='{"libraryName": "react"}')
+// Get a prompt
+mcp(mcp_name="context7", prompt_name="summarize", arguments='{"text": "..."}')
 ```
 
-### Available Skills
+### Background Task Usage
 
-1. **official-docs**: Official documentation lookup
-2. **implementation-examples**: Real-world code examples from GitHub
-3. **codebase-analysis**: Repository exploration and structure analysis
-4. **web-content-extraction**: Web scraping with Puppeteer
-5. **general-research**: Tutorials and articles via web search
-6. **package-research**: Package dependency research
-7. **pr-analysis**: Pull request analysis and implementation history
+```typescript
+// Run a task in background
+background_task(
+  name="data-analysis",
+  command="python analyze.py",
+  poll_interval=5,
+  timeout=300
+)
+
+// Call an agent in background
+call_agent(
+  agent="data-scientist",
+  prompt="Analyze this dataset",
+  background=true
+)
+```
+
+## Hooks Overview
+
+All hooks are enabled by default and can be configured through the plugin's configuration system. Each hook follows the same pattern:
+
+1. **Import**: Import the hook factory from `./hooks`
+2. **Initialize**: Create an instance with `createXXXHook(ctx, config)`
+3. **Register**: Add to the plugin's event handlers
 
 ## Documentation
 
-Comprehensive documentation is available in the `/docs` directory:
-
-- **User Guide**: Getting started and usage examples
-- **API Reference**: Detailed API documentation
-- **Architecture**: System architecture and design
-- **Development**: Development setup and guidelines
-- **Contributing**: How to contribute to the project
-- **Skills Guide**: Skill system documentation in `/skills/README.md`
+- **AGENTS.md**: High-level overview and quick reference
+- **INSTALLATION_COMPLETE.md**: Detailed installation guide
+- **OpenCode Docs**: https://opencode.ai/docs/
+- **Plugin SDK**: https://opencode.ai/docs/plugins/
 
 ## Commands
 
-This plugin includes OpenCode commands that extend functionality:
-
-### `/init-deep`
-
-Generate hierarchical AGENTS.md files with complexity scoring.
-
-**Installation**:
-
 ```bash
-npm run install:commands
+# Build
+bun run build          # TypeScript compilation
+
+# Test
+bun run test          # Run Jest tests
+bun run test:watch    # Watch mode
+
+# Type check
+bun run typecheck     # TypeScript validation
+
+# Clean build
+bun run clean         # Remove dist/
 ```
-
-**Usage**:
-
-```bash
-/init-deep                      # Update mode
-/init-deep --create-new         # Regenerate from scratch
-/init-deep --max-depth=2        # Limit depth
-```
-
-See `commands/README.md` for more details.
 
 ## License
 
@@ -122,23 +180,53 @@ MIT
 
 ### Prerequisites
 
-- Node.js 18+
-- npm 9+
-- TypeScript 5+
+- **Bun**: https://bun.sh/ (required)
+- **TypeScript**: 5+
 
 ### Setup
 
 ```bash
-npm install
+cd my-opencode-plugin
+bun install
 ```
 
 ### Commands
 
-- **Build**: `npm run build`
-- **Test**: `npm test`
-- **Type Check**: `npm run typecheck`
-- **Watch**: `npm run watch`
+- **Build**: `bun run build`
+- **Test**: `bun run test`
+- **Type Check**: `bun run typecheck`
+- **Watch**: `bun run watch`
 
-## License
+## Contributing
 
-MIT
+To contribute to the plugin:
+
+1. Clone the repository
+2. Navigate to `my-opencode-plugin/`
+3. Install dependencies: `bun install`
+4. Make your changes
+5. Build: `npx tsc`
+6. Test your changes
+7. Submit a pull request
+
+All new hooks should follow the same pattern:
+- Create a folder in `src/hooks/`
+- Add an `index.ts` file with the hook implementation
+- Export the hook from `src/hooks/index.ts`
+- Import and register the hook in `src/plugin.ts`
+- Add TypeScript types for configuration options
+
+## Uninstall
+
+To remove the plugin:
+
+```bash
+rm -rf ~/.config/opencode/plugin/my-opencode-plugin/
+```
+
+## Support
+
+For issues or questions:
+- Open an issue on GitHub
+- Join the OpenCode Discord community
+- Check the OpenCode documentation at https://opencode.ai/docs/
