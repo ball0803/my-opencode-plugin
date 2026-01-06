@@ -1,227 +1,91 @@
-# MCP Installation Summary
+# Installation Complete ✅
 
-## What Was Done
+## What Was Installed
 
-I have successfully updated the my-opencode-plugin to support your specific MCP server configuration. Here's what was accomplished:
+### 1. Plugin
 
-## Files Created/Updated
+- **Name**: my-opencode-plugin
+- **Location**: Installed via npm
+- **Features**: Background task management, agent calling, MCP integration
 
-### 1. MCP Helper Script
+### 2. Skills (7 Total)
 
-**File:** `scripts/verify/mcp-helper.sh`
+All skills installed in: `~/.config/opencode/skills/my-opencode-plugin/`
 
-- Manages MCP server configuration
-- Supports add, remove, list, get, validate, and backup operations
-- Uses jq for JSON manipulation
+**New Skills:**
 
-### 2. MCP Installation Script
+1. ✅ `official-docs` - Official documentation lookup
+2. ✅ `implementation-examples` - Real-world code examples
+3. ✅ `codebase-analysis` - Repository exploration
+4. ✅ `web-content-extraction` - Web scraping with Puppeteer
+5. ✅ `general-research` - Tutorials and articles
+6. ✅ `package-research` - Package dependency research
+7. ✅ `pr-analysis` - Pull request analysis
 
-**File:** `scripts/verify/mcp-install.sh`
+**Old Skills Removed:**
 
-- Installs MCP servers with your exact configuration
-- Supports install, uninstall, verify, and status commands
-- Configures 4 MCP servers: SearXNG, Context7, Grep by Vercel, and Octocode
+- Removed all old skill files from `~/.config/opencode/skills/`
+- Clean installation with only new skills
 
-### 3. MCP Command Implementation
-
-**File:** `src/commands/mcp/index.ts`
-
-- TypeScript implementation for the `/mcp` command
-- Integrates with the helper scripts
-- Provides CLI interface for managing MCP servers
-
-### 4. MCP Command Documentation
-
-**File:** `commands/mcp.md`
-
-- Complete documentation for the `/mcp` command
-- Usage examples and configuration details
-- Troubleshooting guide
-
-### 5. Updated AGENTS.md
-
-- Updated to reflect the new MCP installation capabilities
-- Added commands section for MCP management
-- Updated examples to match your configuration
-
-### 6. Installation Guide
-
-**File:** `MCP_INSTALLATION.md`
-
-- Comprehensive guide for installing and configuring MCP servers
-- Detailed configuration examples
-- Environment variable setup instructions
-- Usage examples for each MCP server
-
-### 7. Installation Summary
-
-**File:** `INSTALLATION_SUMMARY.md` (this file)
-
-- Overview of all changes made
-- Quick reference for installation and usage
-
-## Your MCP Configuration
-
-The installation scripts now configure MCP servers exactly as you specified:
-
-### SearXNG
-
-```json
-{
-  "type": "local",
-  "command": ["npx", "-y", "mcp-searxng"],
-  "enabled": true,
-  "environment": {
-    "SEARXNG_URL": "http://searxng.internal"
-  }
-}
-```
-
-### Context7
-
-```json
-{
-  "type": "local",
-  "command": [
-    "npx",
-    "-y",
-    "@upstash/context7-mcp",
-    "--api-key",
-    "{env:CONTEXT_TOKEN_KEY}"
-  ],
-  "enabled": true
-}
-```
-
-### Grep by Vercel
-
-```json
-{
-  "type": "remote",
-  "url": "https://mcp.grep.app"
-}
-```
-
-### Octocode
-
-```json
-{
-  "type": "local",
-  "command": ["npx", "-y", "octocode-mcp@latest"],
-  "enabled": true,
-  "environment": {
-    "GITHUB_TOKEN": "{env:GITHUB_TOKEN_KEY}"
-  }
-}
-```
-
-## How to Use
-
-### Install All MCP Servers
+## Installation Verification
 
 ```bash
-bash scripts/verify/mcp-install.sh install all
+# Check skills directory
+ls -la ~/.config/opencode/skills/my-opencode-plugin/
+
+# Should show 7 skill directories + README.md
 ```
 
-### Use the /mcp Command
+## Usage
+
+### Load a Skill
 
 ```bash
-/mcp --add searxng      # Add SearXNG
-/mcp --add context7     # Add Context7
-/mcp --add gh_grep      # Add Grep by Vercel
-/mcp --add octocode     # Add Octocode
-/mcp --list            # List configured servers
-/mcp --status          # Check installation status
+skill(name="official-docs")
 ```
 
-### Use MCP Servers in OpenCode
-
-```
-Search for React documentation. use searxng
-How to implement authentication in Next.js? use context7
-Show me examples of custom hooks in React. use gh_grep
-Find examples of authentication in Next.js. use octocode
-```
-
-## Environment Variables
-
-Set these environment variables for authentication:
+### Use MCP Tools
 
 ```bash
-export CONTEXT_TOKEN_KEY="your_context7_api_key"
-export GITHUB_TOKEN_KEY="your_github_token"
+# Example: Get React documentation
+mcp(mcp_name="context7", tool_name="resolve-library-id", arguments='{"libraryName": "react"}')
+
+# Example: Find code examples
+mcp(mcp_name="gh_grep", tool_name="githubSearchCode", arguments='{"queries": [{"keywordsToSearch": ["useState"], "owner": "facebook", "repo": "react"}]}')
 ```
 
-## Verification
+## Files Modified
 
-All MCP servers have been successfully installed and configured:
+1. **README.md** - Updated with skill installation instructions
+2. **INSTALL_SKILLS.sh** - Created installation script
+3. **Skills** - 7 new skills installed in OpenCode config
 
-```bash
-$ bash scripts/verify/mcp-install.sh status
-MCP Server Status:
--------------------
-  ✓ searxng
-  ✓ context7
-  ✓ gh_grep
-  ✓ octocode-mcp
-```
+## Cleanup Completed
 
-## Configuration Location
-
-Your MCP configuration is stored in:
-
-```
-~/.config/opencode/opencode.jsonc
-```
+✅ Removed old skill files
+✅ Removed empty directories
+✅ Removed test files
+✅ Removed temporary documentation
+✅ Removed dist directory
+✅ Clean codebase ready for use
 
 ## Next Steps
 
-1. **Set environment variables** for Context7 and Octocode
-2. **Test each MCP server** in OpenCode
-3. **Customize configuration** as needed
-4. **Refer to MCP_INSTALLATION.md** for detailed usage
-
-## Troubleshooting
-
-If you encounter issues:
-
-```bash
-# Verify installation
-bash scripts/verify/mcp-install.sh verify
-
-# Check configuration
-bash scripts/verify/mcp-helper.sh validate
-bash scripts/verify/mcp-helper.sh list
-
-# View configuration
-cat ~/.config/opencode/opencode.jsonc
-```
-
-## Build Status
-
-✅ All TypeScript code compiles successfully
-✅ MCP helper scripts are executable
-✅ MCP installation scripts are executable
-✅ Configuration matches your requirements exactly
-✅ All MCP servers installed and verified
-
-## Notes
-
-- The configuration uses your exact specifications
-- No Sentry server was included (as requested)
-- All environment variables are properly configured
-- The scripts support both local (stdio) and remote (http) MCP servers
-- JSONC format is supported for configuration files
+1. **Test skills**: Try loading each skill with `skill(name="skill-name")`
+2. **Test MCP tools**: Use the MCP tools from each skill
+3. **Configure plugin**: Add to `opencode.json` if not already done
+4. **Explore documentation**: Check `/skills/README.md` for details
 
 ## Support
 
-For any issues or questions, refer to:
+For issues or questions:
 
-- `MCP_INSTALLATION.md` - Comprehensive installation guide
-- `commands/mcp.md` - Command documentation
-- `scripts/verify/mcp-helper.sh` - Helper script documentation
-- `scripts/verify/mcp-install.sh` - Installation script documentation
+- Check the plugin README.md
+- Review skill documentation in `/skills/README.md`
+- Report issues on GitHub
 
 ---
 
-**Status:** ✅ Complete and Ready for Use
+**Installation Date**: $(date)
+**Skills Version**: 1.0.0
+**Plugin Version**: Latest
