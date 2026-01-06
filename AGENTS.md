@@ -1,7 +1,7 @@
 # PROJECT KNOWLEDGE BASE
 
-**Generated:** 2026-01-04
-**Commit:** e83df8e
+**Generated:** 2026-01-06
+**Commit:** 5a183e6
 **Branch:** master
 
 ## OVERVIEW
@@ -62,6 +62,61 @@ my-opencode-plugin/
 - High complexity in tools
 - MCP connections without cleanup
 
+## CODE STYLE GUIDELINES
+
+### Imports
+
+- Always use absolute imports from `src/`
+- Group imports in this order:
+  1. Node.js built-in modules
+  2. Third-party libraries
+  3. Internal modules (relative paths)
+- Avoid wildcard imports (`import * as ...`)
+
+### Formatting
+
+- Use 2 spaces for indentation
+- Maximum line length: 80 characters
+- Place opening braces on the same line
+- Use semicolons at the end of statements
+- Use single quotes for strings
+
+### Types
+
+- Use TypeScript strict mode
+- Prefer interfaces over types for object shapes
+- Use type aliases for unions and primitives
+- Always type function parameters and return values
+- Use `unknown` instead of `any`
+
+### Naming Conventions
+
+- **Files**: kebab-case (e.g., `my-tool.ts`)
+- **Classes**: PascalCase (e.g., `MyTool`)
+- **Functions**: camelCase (e.g., `createTool()`)
+- **Variables**: camelCase (e.g., `toolOptions`)
+- **Constants**: UPPER_SNAKE_CASE (e.g., `MAX_RETRIES`)
+- **Type names**: PascalCase with suffix (e.g., `ToolOptions`)
+- **Private members**: Prefix with underscore (e.g., `_privateMethod()`)
+
+### Error Handling
+
+- Always wrap async operations in try/catch
+- Throw specific error types when appropriate
+- Include context in error messages
+- Never swallow errors silently
+- Use custom error classes for domain-specific errors
+
+### Tool Implementation
+
+- Follow the tool pattern from existing tools
+- Each tool should have:
+  - Clear name and description
+  - Well-defined parameters with types
+  - Async execute method
+  - Proper error handling
+- Use the `createTool` pattern for consistency
+
 ## COMMANDS
 
 ```bash
@@ -69,11 +124,16 @@ my-opencode-plugin/
 bun run build          # Build TypeScript
 
 # Test
-bun run test          # Run Jest tests
+bun run test          # Run all Jest tests
 bun run test:watch    # Watch mode
+bun test <path>       # Run specific test file
+bun test -- <pattern> # Run tests matching pattern
 
 # Type check
 bun run typecheck     # TypeScript validation
+
+# Lint
+bun run lint          # Run ESLint
 
 # Clean
 bun run clean         # Remove dist/
@@ -83,6 +143,7 @@ bash scripts/verify/mcp-install.sh install searxng   # Install SearXNG
 bash scripts/verify/mcp-install.sh install context7  # Install Context7
 bash scripts/verify/mcp-install.sh install gh_grep   # Install Grep by Vercel
 bash scripts/verify/mcp-install.sh install octocode  # Install Octocode
+bash scripts/verify/mcp-install.sh install puppeteer # Install Puppeteer
 bash scripts/verify/mcp-install.sh install all       # Install all MCP servers
 bash scripts/verify/mcp-install.sh uninstall <name>  # Uninstall MCP server
 bash scripts/verify/mcp-install.sh verify            # Verify MCP installation
@@ -100,6 +161,7 @@ Use the `/mcp` command to configure MCP servers:
 /mcp --add context7  # Add Context7 MCP server
 /mcp --add gh_grep   # Add Grep by Vercel MCP server
 /mcp --add octocode  # Add Octocode MCP server
+/mcp --add puppeteer # Add Puppeteer MCP server
 /mcp --list          # List configured MCP servers
 ```
 
@@ -160,6 +222,18 @@ Then use in prompts:
 
 ```
 Find examples of authentication in Next.js. use octocode
+```
+
+#### Puppeteer
+
+```bash
+/mcp --add puppeteer
+```
+
+Then use in prompts:
+
+```
+Navigate to example.com and take a screenshot. use puppeteer
 ```
 
 ## NOTES
