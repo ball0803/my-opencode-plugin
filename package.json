@@ -2,8 +2,9 @@
   "name": "my-opencode-plugin",
   "version": "1.0.0",
   "description": "A modular OpenCode plugin for background task management and agent calling",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "main": "dist/plugin.js",
+  "types": "dist/plugin.d.ts",
   "scripts": {
     "build": "bun run tsc",
     "dev": "bun run tsc --watch",
@@ -40,6 +41,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@opencode-ai/plugin": "^1.0.162",
     "commander": "^14.0.2",
     "jsonc-parser": "^3.2.0",
     "my-opencode-plugin": "file:my-opencode-plugin-1.0.0.tgz",
