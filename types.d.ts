@@ -17,6 +17,12 @@ export interface AgentSession {
   grep(options: any): Promise<any[]>;
   read(options: any): Promise<string>;
   write(options: any): Promise<void>;
+  callAgent(agent: string, prompt: string, options?: any): Promise<any>;
+  getTaskStatus(taskId: string): Promise<any>;
+  getTaskOutput(taskId: string, options?: any): Promise<any>;
+  cancelTask(taskId: string, options?: any): Promise<any>;
+  notifyTaskComplete(taskId: string, result: any): Promise<void>;
+  notifyTaskError(taskId: string, error: string): Promise<void>;
 }
 
 export interface PluginConfig {
@@ -29,7 +35,7 @@ declare module 'opencode' {
     description: string;
     handle(config: any): Promise<any>;
   }
-  
+
   export interface AgentSession {
     id: string;
     getStatus(): Promise<string>;
@@ -39,6 +45,12 @@ declare module 'opencode' {
     grep(options: any): Promise<any[]>;
     read(options: any): Promise<string>;
     write(options: any): Promise<void>;
+    callAgent(agent: string, prompt: string, options?: any): Promise<any>;
+    getTaskStatus(taskId: string): Promise<any>;
+    getTaskOutput(taskId: string, options?: any): Promise<any>;
+    cancelTask(taskId: string, options?: any): Promise<any>;
+    notifyTaskComplete(taskId: string, result: any): Promise<void>;
+    notifyTaskError(taskId: string, error: string): Promise<void>;
   }
 }
 
