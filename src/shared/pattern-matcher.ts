@@ -1,4 +1,10 @@
-import type { ClaudeHooksConfig, HookMatcher } from "../hooks/claude-code-hooks/types.ts"
+// Local type definitions since claude-code-hooks module is not available
+type ClaudeHooksConfig = Record<string, any>;
+
+type HookMatcher = {
+  matcher: string;
+  [key: string]: any;
+};
 
 export function matchesToolMatcher(toolName: string, matcher: string): boolean {
   if (!matcher) {
@@ -22,7 +28,7 @@ export function findMatchingHooks(
   const hookMatchers = config[eventName]
   if (!hookMatchers) return []
 
-  return hookMatchers.filter((hookMatcher) => {
+  return hookMatchers.filter((hookMatcher: HookMatcher) => {
     if (!toolName) return true
     return matchesToolMatcher(toolName, hookMatcher.matcher)
   })

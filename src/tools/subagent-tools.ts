@@ -40,7 +40,11 @@ export function createSubagentTool(manager: BackgroundManager) {
       manager.validateAgent(options.agent);
 
       if (!shouldRunInBackground) {
-        const result = await manager.callAgent(options.agent, options.prompt, {});
+        const result = await manager.callAgent(
+          options.agent,
+          options.prompt,
+          {},
+        );
         return `Result: ${result}`;
       }
 
@@ -117,7 +121,7 @@ export function createSubagentOutputTool(manager: BackgroundManager) {
       const startTime = Date.now();
 
       while (Date.now() - startTime < timeoutMs) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const currentTask = manager.getTask(options.task_id);
         if (!currentTask) {
@@ -128,7 +132,10 @@ export function createSubagentOutputTool(manager: BackgroundManager) {
           return this.formatTaskResult(currentTask);
         }
 
-        if (currentTask.status === 'error' || currentTask.status === 'cancelled') {
+        if (
+          currentTask.status === 'error' ||
+          currentTask.status === 'cancelled'
+        ) {
           return this.formatTaskStatus(currentTask);
         }
       }
@@ -260,7 +267,9 @@ export function createSubagentCancelTool(manager: BackgroundManager) {
 
       if (cancelAll) {
         const tasks = manager.getAllDescendantTasks('main');
-        const runningTasks = tasks.filter(t => t.status === 'running');
+        const runningTasks = tasks.filter(
+          (t: { status: string }) => t.status === 'running',
+        );
 
         if (runningTasks.length === 0) {
           return `✅ No running subagent tasks to cancel.`;
