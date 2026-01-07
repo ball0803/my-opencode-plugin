@@ -1,8 +1,8 @@
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { parse as parseJsonc } from 'jsonc-parser';
-import { MyOpenCodePluginConfigSchema, DEFAULT_CONFIG } from './schema.js';
-import type { MyOpenCodePluginConfig } from './schema.js';
+import { MyOpenCodePluginConfigSchema, DEFAULT_CONFIG } from './schema.ts';
+import type { MyOpenCodePluginConfig } from './schema.ts';
 
 // Import types from types.ts
 import type {
@@ -22,16 +22,16 @@ import type {
   SkillsConfig,
   SkillDefinition,
   ClaudeCodeConfig,
-} from './types.js';
+} from './types.ts';
 
 // Re-export all schemas from types.ts
-export * from './types.js';
+export * from './types.ts';
 
 // Re-export main config schema from schema.ts
 export {
   MyOpenCodePluginConfigSchema,
   type MyOpenCodePluginConfig,
-} from './schema.js';
+} from './schema.ts';
 
 // Re-export MCP types
 export {
@@ -39,7 +39,7 @@ export {
   type AnyMcpName,
   McpNameSchema,
   type McpName,
-} from '../mcp/types.js';
+} from '../mcp/types.ts';
 
 // Re-export types for backward compatibility
 export type {
@@ -59,11 +59,7 @@ export type {
   SkillsConfig,
   SkillDefinition,
   ClaudeCodeConfig,
-} from './types.js';
-
-// Alias for backward compatibility
-export { MyOpenCodePluginConfigSchema as OhMyOpenCodeConfigSchema };
-export type { MyOpenCodePluginConfig as OhMyOpenCodeConfig };
+} from './types.ts';
 
 export class ConfigLoader {
   private config: MyOpenCodePluginConfig;
