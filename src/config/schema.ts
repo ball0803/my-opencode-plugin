@@ -1,50 +1,61 @@
 import { z } from 'zod';
+import { AnyMcpNameSchema, McpNameSchema } from '../mcp/types.js';
+import {
+  BuiltinAgentNameSchema,
+  BuiltinSkillNameSchema,
+  HookNameSchema,
+  BuiltinCommandNameSchema,
+  AgentOverridesSchema,
+  ClaudeCodeConfigSchema,
+  SisyphusAgentConfigSchema,
+  CommentCheckerConfigSchema,
+  ExperimentalConfigSchema,
+  SkillsConfigSchema,
+  RalphLoopConfigSchema,
+  BackgroundTaskConfigSchema,
+  NotificationConfigSchema,
+} from './types.js';
 
-export const McpNameSchema = z.enum(['searxng', 'context7', 'grep_app']);
-
-export const AgentConfigSchema = z.object({
-  description: z.string().optional(),
-  disabled: z.boolean().default(false),
-  model: z.string().optional(),
-  temperature: z.number().min(0).max(2).optional(),
-  maxTokens: z.number().optional(),
-  topP: z.number().min(0).max(1).optional(),
-  frequencyPenalty: z.number().optional(),
-  presencePenalty: z.number().optional(),
-  stop: z.array(z.string()).optional(),
-  stream: z.boolean().optional(),
-  settings: z.record(z.unknown()).optional(),
-});
-
-export const BackgroundConfigSchema = z.object({
-  maxConcurrentTasks: z.number().min(1).max(100).default(10),
-  taskTTL: z
-    .number()
-    .min(60000)
-    .max(86400000)
-    .default(30 * 60 * 1000),
-  pollInterval: z.number().min(1000).max(30000).default(2000),
-});
-
-export const PluginConfigSchema = z.object({
-  agents: z.record(AgentConfigSchema).default({}),
+export const MyOpenCodePluginConfigSchema = z.object({
+  $schema: z.string().optional(),
+  disabled_mcps: z.array(AnyMcpNameSchema).optional(),
+  disabled_agents: z.array(BuiltinAgentNameSchema).optional(),
+  disabled_skills: z.array(BuiltinSkillNameSchema).optional(),
+  disabled_hooks: z.array(HookNameSchema).optional(),
+  disabled_commands: z.array(BuiltinCommandNameSchema).optional(),
+  agents: AgentOverridesSchema.optional(),
+  claude_code: ClaudeCodeConfigSchema.optional(),
+  google_auth: z.boolean().optional(),
+  sisyphus_agent: SisyphusAgentConfigSchema.optional(),
+  comment_checker: CommentCheckerConfigSchema.optional(),
+  experimental: ExperimentalConfigSchema.optional(),
+  auto_update: z.boolean().optional(),
+  skills: SkillsConfigSchema.optional(),
+  ralph_loop: RalphLoopConfigSchema.optional(),
+  background_task: BackgroundTaskConfigSchema.optional(),
+  notification: NotificationConfigSchema.optional(),
   permissions: z.record(z.array(z.string())).optional(),
-  background: BackgroundConfigSchema.optional(),
-  disabled_mcps: z.array(McpNameSchema).default([]),
 });
 
-export type AgentConfig = z.infer<typeof AgentConfigSchema>;
-export type BackgroundConfig = z.infer<typeof BackgroundConfigSchema>;
-export type McpName = z.infer<typeof McpNameSchema>;
-export type PluginConfig = z.infer<typeof PluginConfigSchema>;
+export type MyOpenCodePluginConfig = z.infer<
+  typeof MyOpenCodePluginConfigSchema
+>;
 
-export const DEFAULT_CONFIG: PluginConfig = {
+export const DEFAULT_CONFIG: MyOpenCodePluginConfig = {
   agents: {},
-  permissions: {},
-  background: {
-    maxConcurrentTasks: 10,
-    taskTTL: 30 * 60 * 1000,
-    pollInterval: 2000,
-  },
   disabled_mcps: [],
+  disabled_agents: [],
+  disabled_skills: [],
+  disabled_hooks: [],
+  disabled_commands: [],
+  permissions: {},
+  claude_code: {},
+  sisyphus_agent: {},
+  comment_checker: {},
+  experimental: {},
+  auto_update: false,
+  skills: {},
+  ralph_loop: {},
+  background_task: {},
+  notification: {},
 };

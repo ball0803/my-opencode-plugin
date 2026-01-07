@@ -1,22 +1,83 @@
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { parse as parseJsonc } from 'jsonc-parser';
-import { PluginConfigSchema, DEFAULT_CONFIG } from './schema';
-import type { PluginConfig, AgentConfig } from './schema';
+import { MyOpenCodePluginConfigSchema, DEFAULT_CONFIG } from './schema.js';
+import type { MyOpenCodePluginConfig } from './schema.js';
+
+// Import types from types.ts
+import type {
+  AgentOverrideConfig,
+  AgentOverrides,
+  AgentName,
+  HookName,
+  BuiltinCommandName,
+  BuiltinSkillName,
+  SisyphusAgentConfig,
+  CommentCheckerConfig,
+  ExperimentalConfig,
+  DynamicContextPruningConfig,
+  RalphLoopConfig,
+  BackgroundTaskConfig,
+  NotificationConfig,
+  SkillsConfig,
+  SkillDefinition,
+  ClaudeCodeConfig,
+} from './types.js';
+
+// Re-export all schemas from types.ts
+export * from './types.js';
+
+// Re-export main config schema from schema.ts
+export {
+  MyOpenCodePluginConfigSchema,
+  type MyOpenCodePluginConfig,
+} from './schema.js';
+
+// Re-export MCP types
+export {
+  AnyMcpNameSchema,
+  type AnyMcpName,
+  McpNameSchema,
+  type McpName,
+} from '../mcp/types.js';
+
+// Re-export types for backward compatibility
+export type {
+  AgentOverrideConfig,
+  AgentOverrides,
+  AgentName,
+  HookName,
+  BuiltinCommandName,
+  BuiltinSkillName,
+  SisyphusAgentConfig,
+  CommentCheckerConfig,
+  ExperimentalConfig,
+  DynamicContextPruningConfig,
+  RalphLoopConfig,
+  BackgroundTaskConfig,
+  NotificationConfig,
+  SkillsConfig,
+  SkillDefinition,
+  ClaudeCodeConfig,
+} from './types.js';
+
+// Alias for backward compatibility
+export { MyOpenCodePluginConfigSchema as OhMyOpenCodeConfigSchema };
+export type { MyOpenCodePluginConfig as OhMyOpenCodeConfig };
 
 export class ConfigLoader {
-  private config: PluginConfig;
+  private config: MyOpenCodePluginConfig;
 
   constructor() {
     this.config = { ...DEFAULT_CONFIG };
   }
 
-  loadConfig(configPath?: string): PluginConfig {
+  loadConfig(configPath?: string): MyOpenCodePluginConfig {
     try {
       if (configPath && existsSync(configPath)) {
-         const fileContent = readFileSync(configPath, 'utf-8' as any);
+        const fileContent = readFileSync(configPath, 'utf-8' as any);
         const parsed = parseJsonc(fileContent);
-        const validated = PluginConfigSchema.parse(parsed);
+        const validated = MyOpenCodePluginConfigSchema.parse(parsed);
         this.config = { ...DEFAULT_CONFIG, ...validated };
       }
     } catch (error) {
@@ -26,12 +87,12 @@ export class ConfigLoader {
     return this.config;
   }
 
-  getConfig(): PluginConfig {
+  getConfig(): MyOpenCodePluginConfig {
     return this.config;
   }
 
-  getAgentConfig(agentName: string): AgentConfig | undefined {
-    return this.config.agents?.[agentName];
+  getAgentConfig(agentName: string): AgentOverrideConfig | undefined {
+    return this.config.agents?.[agentName as keyof AgentOverrides];
   }
 
   getAvailableAgents(): string[] {
@@ -43,16 +104,88 @@ export class ConfigLoader {
     return agents.includes(agentName);
   }
 
-  isAgentDisabled(agentName: string): boolean {
-    const agentConfig = this.getAgentConfig(agentName);
-    return agentConfig?.disabled ?? false;
+  getSkillConfig(skillName: string): SkillDefinition | boolean | undefined {
+    return this.config.skills?.[skillName as keyof SkillsConfig];
   }
 
-  hasPermission(agentName: string, permission: string): boolean {
-    return this.config.permissions?.[agentName]?.includes(permission) ?? true;
+  getAvailableSkills(): string[] {
+    return Object.keys(this.config.skills || {});
   }
 
-  mergeConfig(newConfig: Partial<PluginConfig>): void {
-    this.config = { ...this.config, ...newConfig };
+  isSkillAvailable(skillName: string): boolean {
+    return this.getAvailableSkills().includes(skillName);
+  }
+
+  getPermission(permissionName: string): string[] | undefined {
+    return this.config.permissions?.[permissionName];
+  }
+
+  getAllPermissions(): Record<string, string[]> {
+    return this.config.permissions || {};
+  }
+
+  hasPermission(permissionName: string, action: string): boolean {
+    const permission = this.getPermission(permissionName);
+    return permission ? permission.includes(action) : false;
+  }
+
+  getBackgroundConfig(): BackgroundTaskConfig {
+    return this.config.background_task || {};
+  }
+
+  getNotificationConfig(): NotificationConfig {
+    return this.config.notification || {};
+  }
+
+  getRalphLoopConfig(): RalphLoopConfig {
+    return this.config.ralph_loop || {};
+  }
+
+  getExperimentalConfig(): ExperimentalConfig {
+    return this.config.experimental || {};
+  }
+
+  getSkillsConfig(): SkillsConfig {
+    return this.config.skills || {};
+  }
+
+  getClaudeCodeConfig(): ClaudeCodeConfig {
+    return this.config.claude_code || {};
+  }
+
+  getSisyphusAgentConfig(): SisyphusAgentConfig {
+    return this.config.sisyphus_agent || {};
+  }
+
+  getCommentCheckerConfig(): CommentCheckerConfig {
+    return this.config.comment_checker || {};
+  }
+
+  getDisabledAgents(): string[] {
+    return this.config.disabled_agents || [];
+  }
+
+  getDisabledSkills(): string[] {
+    return this.config.disabled_skills || [];
+  }
+
+  getDisabledHooks(): string[] {
+    return this.config.disabled_hooks || [];
+  }
+
+  getDisabledCommands(): string[] {
+    return this.config.disabled_commands || [];
+  }
+
+  getDisabledMcps(): string[] {
+    return this.config.disabled_mcps || [];
+  }
+
+  getAutoUpdate(): boolean {
+    return this.config.auto_update || false;
+  }
+
+  getGoogleAuth(): boolean {
+    return this.config.google_auth || false;
   }
 }
