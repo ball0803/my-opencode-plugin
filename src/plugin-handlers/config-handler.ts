@@ -3,7 +3,7 @@ export type ConfigHandler = {
   description: string;
   handle(config: any): Promise<any>;
 };
-import { ConfigLoader } from '../config';
+import { ConfigLoader } from ".../config.ts";
 import type { PluginConfig } from '../config/schema';
 
 export function createConfigHandler(configLoader: ConfigLoader): ConfigHandler {

@@ -1,1 +1,1 @@
-export { createPluginVerificationTools } from './tools.js';
+export { createPluginVerificationTools } from "./tools.js.ts";

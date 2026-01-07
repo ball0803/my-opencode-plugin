@@ -1,4 +1,4 @@
-import type { ClaudeHooksConfig, HookMatcher } from "../hooks/claude-code-hooks/types"
+import type { ClaudeHooksConfig, HookMatcher } from "../hooks/claude-code-hooks/types.ts"
 
 export function matchesToolMatcher(toolName: string, matcher: string): boolean {
   if (!matcher) {

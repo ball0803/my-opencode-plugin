@@ -2,8 +2,9 @@
   "compilerOptions": {
     "typeRoots": ["./node_modules/@types", "./src"],
     "target": "ESNext",
-    "module": "Node16",
-    "moduleResolution": "node16",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "declaration": true,
     "declarationDir": "dist",
     "outDir": "dist",
@@ -15,7 +16,8 @@
     "resolveJsonModule": true,
     "lib": ["ESNext", "DOM"],
     "types": ["node"],
-    "isolatedModules": true
+    "isolatedModules": true,
+    "noEmit": true
   },
   "include": ["src/**/*", "types.d.ts"],
   "exclude": ["node_modules", "dist", "src/**/*.test.ts"]

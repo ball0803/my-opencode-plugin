@@ -1,6 +1,6 @@
 import type { Plugin } from '@opencode-ai/plugin';
 import type { HookName } from './config/schema.js';
-import { getMainSessionID, setMainSession, log } from './shared.js';
+import { getMainSessionID, setMainSession, log } from "./shared.js.ts";
 
 import { BackgroundManager } from './background-agent/manager.js';
 import type { BackgroundManagerOptions } from './core/types.js';
@@ -31,7 +31,7 @@ import {
   createToolOutputTruncatorHook,
 } from './hooks/index.js';
 
-import { loadPluginConfig } from './plugin-config.js';
+import { loadPluginConfig } from "./plugin-config.js.ts";
 import type { OhMyOpenCodeConfig } from './config/schema.js';
 import type { AgentSession } from './background-agent/types.js';
 

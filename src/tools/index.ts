@@ -1,7 +1,7 @@
 // Tools index - exports all available tools
 
-export * from './background-task';
-export * from './call-agent';
-export * from './agent-discovery';
-export * from './subagent';
-export * from './ast-grep';
+export * from "./background-task.ts";
+export * from "./call-agent.ts";
+export * from "./agent-discovery.ts";
+export * from "./subagent.ts";
+export * from "./ast-grep.ts";

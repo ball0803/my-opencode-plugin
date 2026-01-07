@@ -1,5 +1,5 @@
-import type { DiscoveryResult, GenerationLocation, ScoredDirectory, ScoringResult } from "./types";
-import { SCORE_THRESHOLDS, SCORING_WEIGHTS } from "./constants";
+import type { DiscoveryResult, GenerationLocation, ScoredDirectory, ScoringResult } from "./types.ts";
+import { SCORE_THRESHOLDS, SCORING_WEIGHTS } from "./constants.ts";
 
 export async function runScoringPhase(
   discoveryResult: DiscoveryResult

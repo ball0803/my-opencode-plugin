@@ -1,5 +1,5 @@
 import * as fs from "fs"
-import { log } from "./logger"
+import { log } from "./logger.ts"
 
 // Migration map: old keys → new keys (for backward compatibility)
 export const AGENT_NAME_MAP: Record<string, string> = {

@@ -11,7 +11,7 @@ import {
   parseJsonc,
   detectConfigFile,
   migrateConfigFile,
-} from './shared';
+} from "./shared.ts";
 
 export function loadConfigFromPath(
   configPath: string,

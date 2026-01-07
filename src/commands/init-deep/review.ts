@@ -3,8 +3,8 @@ import type { Glob } from "../../../types.d"
 import type { Read } from "../../../types.d"
 import type { Write } from "../../../types.d"
 import type { BackgroundManager } from "../../../types.d"
-import { DiscoveryResult, ReviewResult, ScoringResult, Phase4Result } from "./types"
-import { TODO_WRITE_IDS } from "./constants"
+import { DiscoveryResult, ReviewResult, ScoringResult, Phase4Result } from "./types.ts"
+import { TODO_WRITE_IDS } from "./constants.ts"
 
 export async function reviewPhase(
   discoveryResult: DiscoveryResult,

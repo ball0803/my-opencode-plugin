@@ -1,4 +1,4 @@
-import { isPlainObject } from "./deep-merge"
+import { isPlainObject } from "./deep-merge.ts"
 
 export function camelToSnake(str: string): string {
   return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)

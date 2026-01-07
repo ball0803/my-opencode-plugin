@@ -1,11 +1,11 @@
 import type { AgentSession } from "../../../types.d";
-import { BackgroundManager } from "../../background-agent/manager";
-import { runDiscoveryPhase } from "./discovery";
-import { runScoringPhase } from "./scoring";
-import { generatePhase } from "./generation";
-import { reviewPhase } from "./review";
-import { TODO_WRITE_IDS } from "./constants";
-import type { FinalReport } from "./types";
+import { BackgroundManager } from "../../background-agent/manager.ts";
+import { runDiscoveryPhase } from "./discovery.ts";
+import { runScoringPhase } from "./scoring.ts";
+import { generatePhase } from "./generation.ts";
+import { reviewPhase } from "./review.ts";
+import { TODO_WRITE_IDS } from "./constants.ts";
+import type { FinalReport } from "./types.ts";
 
 export async function handleInitDeepCommand(
   session: AgentSession,

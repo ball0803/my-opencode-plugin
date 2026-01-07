@@ -1,4 +1,4 @@
-import type { BackgroundTask } from "../../background-agent/types";
+import type { BackgroundTask } from "../../background-agent/types.ts";
 
 export interface DiscoveryResult {
   structure: string[];

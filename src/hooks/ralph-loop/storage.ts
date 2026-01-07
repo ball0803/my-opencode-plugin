@@ -1,23 +1,23 @@
-import type { RalphLoopState } from "./types.ts"
+import type { RalphLoopState } from './types.ts';
 
-const activeLoops = new Map<string, RalphLoopState>()
+const activeLoops = new Map<string, RalphLoopState>();
 
 export function getActiveLoop(sessionID: string): RalphLoopState | undefined {
-  return activeLoops.get(sessionID)
+  return activeLoops.get(sessionID);
 }
 
 export function setActiveLoop(state: RalphLoopState): void {
-  activeLoops.set(state.sessionID, state)
+  activeLoops.set(state.sessionID, state);
 }
 
 export function deleteActiveLoop(sessionID: string): void {
-  activeLoops.delete(sessionID)
+  activeLoops.delete(sessionID);
 }
 
 export function clearAllLoops(): void {
-  activeLoops.clear()
+  activeLoops.clear();
 }
 
 export function getAllActiveLoops(): RalphLoopState[] {
-  return Array.from(activeLoops.values())
+  return Array.from(activeLoops.values());
 }

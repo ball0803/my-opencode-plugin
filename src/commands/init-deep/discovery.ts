@@ -1,8 +1,8 @@
 import type { AgentSession } from "../../../types.d";
-import type { DiscoveryResult, ExistingAgent, ScaleMetrics } from "./types";
-import { BackgroundManager } from "../../background-agent/manager";
-import { GetBackgroundOutputResult, BackgroundTask } from "../../background-agent/types";
-import { EXPLORE_PROMPTS, DEFAULT_MAX_DEPTH } from "./constants";
+import type { DiscoveryResult, ExistingAgent, ScaleMetrics } from "./types.ts";
+import { BackgroundManager } from "../../background-agent/manager.ts";
+import { GetBackgroundOutputResult, BackgroundTask } from "../../background-agent/types.ts";
+import { EXPLORE_PROMPTS, DEFAULT_MAX_DEPTH } from "./constants.ts";
 
 export async function runDiscoveryPhase(
   session: AgentSession,

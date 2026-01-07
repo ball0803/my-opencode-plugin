@@ -1,4 +1,4 @@
-import { supportsNewPermissionSystem } from "./opencode-version"
+import { supportsNewPermissionSystem } from "./opencode-version.ts"
 
 export type PermissionValue = "ask" | "allow" | "deny"
 

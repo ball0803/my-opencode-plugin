@@ -1,4 +1,4 @@
-import type { AgentCallOptions, AgentCallResult, AgentSession, BackgroundManagerOptions, BackgroundTask, BackgroundTaskStatus, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult, LaunchInput, TaskNotification } from './types';
+import type { AgentCallOptions, AgentCallResult, AgentSession, BackgroundManagerOptions, BackgroundTask, BackgroundTaskStatus, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult, LaunchInput, TaskNotification } from "./types.ts";
 
 export class BackgroundManager {
   private tasks: Map<string, BackgroundTask> = new Map();

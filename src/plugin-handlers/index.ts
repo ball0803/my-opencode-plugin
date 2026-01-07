@@ -1,4 +1,4 @@
-import { createConfigHandler, ConfigHandler } from './config-handler';
+import { createConfigHandler, ConfigHandler } from "./config-handler.ts";
 
 export function createPluginHandlers(configLoader: any): ConfigHandler[] {
   return [
@@ -6,4 +6,4 @@ export function createPluginHandlers(configLoader: any): ConfigHandler[] {
   ];
 }
 
-export type { ConfigHandler } from './config-handler';
+export type { ConfigHandler } from "./config-handler.ts";
