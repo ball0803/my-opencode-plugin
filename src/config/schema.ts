@@ -14,7 +14,7 @@ import {
   RalphLoopConfigSchema,
   BackgroundTaskConfigSchema,
   NotificationConfigSchema,
-} from "./types.js.ts";
+} from './types.ts';
 
 export const MyOpenCodePluginConfigSchema = z.object({
   $schema: z.string().optional(),

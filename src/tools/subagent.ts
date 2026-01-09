@@ -2,4 +2,4 @@
 
 export { createSubagentTools } from "./tools.ts";
 
-export type { BackgroundManager } from '../../background-agent/manager';
+export type { BackgroundManager } from '../../features/background-agent/manager';

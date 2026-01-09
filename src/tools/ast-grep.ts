@@ -1,1 +1,1 @@
-export { createAstGrepTools } from "./tools.ts";
+export { createAstGrepTools } from "./ast-grep-tools";

@@ -1,7 +1,7 @@
 // Agent discovery tools index
 
-import { BackgroundManager } from '../../background-agent/manager';
-import { createListAgentsTool, createGetAgentInfoTool } from "./tools.ts";
+import { BackgroundManager } from '../../features/background-agent/manager';
+import { createListAgentsTool, createGetAgentInfoTool } from "./agent-discovery-tools";
 
 export function createAgentDiscoveryTools(manager: BackgroundManager) {
   return {
@@ -10,4 +10,4 @@ export function createAgentDiscoveryTools(manager: BackgroundManager) {
   };
 }
 
-export type { BackgroundManager } from '../../background-agent/manager';
+export type { BackgroundManager } from '../../features/background-agent/manager';

@@ -1,5 +1,5 @@
-import { createBackgroundTaskTool, getBackgroundOutputTool, cancelBackgroundTaskTool } from "./tools.ts";
-import type { BackgroundManager } from '../../background-agent/manager';
+import { createBackgroundTaskTool, getBackgroundOutputTool, cancelBackgroundTaskTool } from "./background-task-tools";
+import type { BackgroundManager } from '../../features/background-agent/manager';
 
 export function createBackgroundTaskTools(manager: BackgroundManager) {
   return {
@@ -9,5 +9,5 @@ export function createBackgroundTaskTools(manager: BackgroundManager) {
   };
 }
 
-export type { BackgroundTask, BackgroundTaskOptions, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult } from '../../background-agent/types';
-export type { BackgroundManager } from '../../background-agent/manager';
+export type { BackgroundTask, BackgroundTaskOptions, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult } from '../../features/background-agent/types';
+export type { BackgroundManager } from '../../features/background-agent/manager';

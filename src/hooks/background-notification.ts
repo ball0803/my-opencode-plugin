@@ -1,4 +1,4 @@
-import type { BackgroundManager } from "../../background-agent/manager.ts"
+import type { BackgroundManager } from "../../features/background-agent/manager"
 
 interface Event {
   type: string

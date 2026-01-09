@@ -41,6 +41,7 @@ export const HookNameSchema = z.enum([
   'directory-agents-injector',
   'directory-readme-injector',
   'todo-continuation-enforcer',
+  'tool-output-truncator',
   'edit-error-recovery',
   'empty-message-sanitizer',
   'empty-task-response-detector',
@@ -49,7 +50,7 @@ export const HookNameSchema = z.enum([
   'ralph-loop',
   'rules-injector',
   'session-notification',
-  'think-mode',
+  'thinking-mode',
   'non-interactive-env',
 ]);
 

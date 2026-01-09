@@ -1,5 +1,5 @@
-declare module '../../background-agent/manager' {
-  import { BackgroundManager } from '../../background-agent/manager';
+declare module '../../features/background-agent/manager' {
+  import { BackgroundManager } from '../../features/background-agent/manager';
   interface BackgroundManager {
     getAvailableAgents(): string[];
     isAgentAvailable(agentName: string): boolean;
@@ -7,7 +7,7 @@ declare module '../../background-agent/manager' {
   }
 }
 
-declare module '../../background-agent/types' {
+declare module '../../features/background-agent/types' {
   export type {
     BackgroundTask,
     BackgroundTaskOptions,
@@ -22,5 +22,5 @@ declare module '../../background-agent/types' {
     BackgroundTaskStatus,
     LaunchInput,
     TaskNotification,
-  } from '../../background-agent/types';
+  } from '../../features/background-agent/types';
 }

@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {
   MyOpenCodePluginConfig,
-  type MyOpenCodePluginConfigSchema,
+  MyOpenCodePluginConfigSchema,
 } from './config/index.ts';
 import {
   log,
@@ -11,7 +11,7 @@ import {
   parseJsonc,
   detectConfigFile,
   migrateConfigFile,
-} from "./shared.ts";
+} from './shared/index.ts';
 
 export function loadConfigFromPath(
   configPath: string,

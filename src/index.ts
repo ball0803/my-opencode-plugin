@@ -1,8 +1,8 @@
 import type { Plugin } from '@opencode-ai/plugin';
-import type { HookName } from './config/schema.js';
-import { getMainSessionID, setMainSession, log } from "./shared.js.ts";
+import type { HookName } from './config/index.ts';
+import { log, getMainSessionID, setMainSession } from './shared/index.ts';
 
-import { BackgroundManager } from './background-agent/manager.js';
+import { BackgroundManager } from './features/background-agent/manager.js';
 import type { BackgroundManagerOptions } from './core/types.js';
 
 import { createBackgroundTaskTools } from './tools/background-task/index.js';
@@ -29,11 +29,12 @@ import {
   createSessionNotificationHook,
   createThinkingModeHook,
   createToolOutputTruncatorHook,
+  createTodoContinuationEnforcer,
 } from './hooks/index.js';
 
-import { loadPluginConfig } from "./plugin-config.js.ts";
-import type { OhMyOpenCodeConfig } from './config/schema.js';
-import type { AgentSession } from './background-agent/types.js';
+import { loadPluginConfig } from './plugin-config.ts';
+import type { MyOpenCodePluginConfig } from './config/schema.ts';
+import type { AgentSession } from './features/background-agent/types.js';
 
 const MyOpenCodePlugin: Plugin = async (ctx) => {
   const pluginConfig = loadPluginConfig(ctx.directory, ctx);
@@ -46,13 +47,20 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
   const backgroundNotificationHook = isHookEnabled('background-notification')
     ? createBackgroundNotificationHook(ctx)
     : null;
+
+  const backgroundManager = new BackgroundManager(ctx);
+
+  const todoContinuationEnforcer = isHookEnabled('todo-continuation-enforcer')
+    ? createTodoContinuationEnforcer(ctx, { backgroundManager })
+    : null;
+
   const commentCheckerHook = isHookEnabled('comment-checker')
-    ? createCommentCheckerHooks(ctx)
+    ? createCommentCheckerHooks()
     : null;
   const compactionContextInjectorHook = isHookEnabled(
     'compaction-context-injector',
   )
-    ? createCompactionContextInjector(ctx)
+    ? createCompactionContextInjector()
     : null;
   const directoryAgentsInjectorHook = isHookEnabled('directory-agents-injector')
     ? createDirectoryAgentsInjectorHook(ctx)
@@ -64,7 +72,7 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
     ? createEditErrorRecoveryHook(ctx)
     : null;
   const emptyMessageSanitizerHook = isHookEnabled('empty-message-sanitizer')
-    ? createEmptyMessageSanitizerHook(ctx)
+    ? createEmptyMessageSanitizerHook()
     : null;
   const emptyTaskResponseDetectorHook = isHookEnabled(
     'empty-task-response-detector',

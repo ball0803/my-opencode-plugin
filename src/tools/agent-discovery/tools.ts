@@ -1,4 +1,4 @@
-import { BackgroundManager } from '../../background-agent/manager';
+import { BackgroundManager } from '../../features/background-agent/manager';
 
 // Default agent descriptions that can be extended via configuration
 const DEFAULT_AGENT_DESCRIPTIONS: Record<string, string> = {

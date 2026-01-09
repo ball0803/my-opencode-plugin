@@ -1,5 +1,5 @@
-import type { BackgroundTask, LaunchInput } from '../../background-agent/types';
-import { BackgroundManager } from '../../background-agent/manager';
+import type { BackgroundTask, LaunchInput } from '../../features/background-agent/types';
+import { BackgroundManager } from '../../features/background-agent/manager';
 
 export function createSubagentTool(manager: BackgroundManager) {
   return {

@@ -1,5 +1,5 @@
 import type { AgentSession } from "../../../types.d";
-import { BackgroundManager } from "../../background-agent/manager.ts";
+import { BackgroundManager } from "../../features/background-agent/manager.ts";
 import { runDiscoveryPhase } from "./discovery.ts";
 import { runScoringPhase } from "./scoring.ts";
 import { generatePhase } from "./generation.ts";

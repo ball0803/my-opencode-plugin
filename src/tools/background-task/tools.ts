@@ -1,5 +1,5 @@
-import type { BackgroundTask, BackgroundTaskOptions, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult } from '../../background-agent/types';
-import { BackgroundManager } from '../../background-agent/manager';
+import type { BackgroundTask, BackgroundTaskOptions, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult } from '../../features/background-agent/types';
+import { BackgroundManager } from '../../features/background-agent/manager';
 
 export function createBackgroundTaskTool(manager: BackgroundManager) {
   return {

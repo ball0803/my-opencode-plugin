@@ -1,5 +1,5 @@
 import { createBackgroundTaskTool, getBackgroundOutputTool, cancelBackgroundTaskTool } from "./tools.ts";
-import type { BackgroundManager } from '../../background-agent/manager';
+import type { BackgroundManager } from '../../features/background-agent/manager';
 
 export function createBackgroundTaskTools(manager: BackgroundManager) {
   return {

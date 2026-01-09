@@ -1,8 +1,8 @@
 import type {
   AgentCallOptions,
   AgentCallResult,
-} from '../../background-agent/types';
-import { BackgroundManager } from '../../background-agent/manager';
+} from '../../features/background-agent/types';
+import { BackgroundManager } from '../../features/background-agent/manager';
 
 export function createCallAgentTool(manager: BackgroundManager) {
   return {
