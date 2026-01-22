@@ -78,8 +78,13 @@ export interface Write {
 }
 
 export interface BackgroundManager {
-  initialize(session: any): Promise<void>;
   launch(options: any): Promise<any>;
-  getOutput(taskId: string): Promise<any>;
-  cleanup(): Promise<void>;
+  getTask(taskId: string): any;
+  getTasksByParentSession(sessionID: string): any[];
+  getAllDescendantTasks(sessionID: string): any[];
+  findBySession(sessionID: string): any;
+  handleEvent(event: any): void;
+  getPendingNotifications(sessionID: string): any[];
+  clearNotifications(sessionID: string): void;
+  cleanup(): void;
 }
