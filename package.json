@@ -42,6 +42,7 @@
   "license": "MIT",
   "dependencies": {
     "@ast-grep/napi": "^0.40.5",
+    "@modelcontextprotocol/sdk": "1.25.3",
     "@opencode-ai/plugin": "^1.0.162",
     "commander": "^14.0.2",
     "jsonc-parser": "^3.2.0",
