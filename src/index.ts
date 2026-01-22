@@ -104,16 +104,16 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
   return {
     tool: {},
     event: async (input) => {
-      await backgroundNotificationHook?.event(input);
-      await sessionNotificationHook?.event(input);
-      await directoryAgentsInjectorHook?.event(input);
-      await directoryReadmeInjectorHook?.event(input);
-      await rulesInjectorHook?.event(input);
-      await thinkingModeHook?.event(input);
-      await interactiveBashSessionHook?.event(input);
-      await ralphLoopHook?.event(input);
+      await (backgroundNotificationHook as any)?.event(input);
+      await (sessionNotificationHook as any)?.event(input);
+      await (directoryAgentsInjectorHook as any)?.event(input);
+      await (directoryReadmeInjectorHook as any)?.event(input);
+      await (rulesInjectorHook as any)?.event(input);
+      await (thinkingModeHook as any)?.event(input);
+      await (interactiveBashSessionHook as any)?.event(input);
+      await (ralphLoopHook as any)?.event(input);
 
-      const { event } = input;
+      const event = input.event;
       const props = event.properties as Record<string, unknown> | undefined;
 
       if (event.type === 'session.created') {
@@ -148,9 +148,12 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
       }
     },
     'chat.message': async (input, output) => {
-      await keywordDetectorHook?.['chat.message']?.(input, output);
-      await compactionContextInjectorHook?.['chat.message']?.(input, output);
-      await autoSlashCommandHook?.['chat.message']?.(input, output);
+      await (keywordDetectorHook as any)?.['chat.message']?.(input, output);
+      await (compactionContextInjectorHook as any)?.['chat.message']?.(
+        input,
+        output,
+      );
+      await (autoSlashCommandHook as any)?.['chat.message']?.(input, output);
 
       if (ralphLoopHook) {
         const parts = (
@@ -191,7 +194,7 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
             sessionID: input.sessionID,
             prompt,
           });
-          ralphLoopHook.startLoop(input.sessionID, prompt, {
+          (ralphLoopHook as any).startLoop(input.sessionID, prompt, {
             maxIterations: maxIterMatch
               ? parseInt(maxIterMatch[1], 10)
               : undefined,
@@ -249,7 +252,7 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
             /--completion-promise=["]?([^"'\s]+)["]?/i,
           );
 
-          ralphLoopHook.startLoop(sessionID, prompt, {
+          (ralphLoopHook as any).startLoop(sessionID, prompt, {
             maxIterations: maxIterMatch
               ? parseInt(maxIterMatch[1], 10)
               : undefined,
@@ -261,17 +264,32 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
       }
     },
     'tool.execute.after': async (input, output) => {
-      await toolOutputTruncatorHook?.['tool.execute.after'](input, output);
-      await commentCheckerHook?.['tool.execute.after'](input, output);
-      await directoryAgentsInjectorHook?.['tool.execute.after'](input, output);
-      await directoryReadmeInjectorHook?.['tool.execute.after'](input, output);
-      await rulesInjectorHook?.['tool.execute.after'](input, output);
-      await emptyTaskResponseDetectorHook?.['tool.execute.after'](
+      await (toolOutputTruncatorHook as any)?.['tool.execute.after'](
         input,
         output,
       );
-      await interactiveBashSessionHook?.['tool.execute.after'](input, output);
-      await editErrorRecoveryHook?.['tool.execute.after'](input, output);
+      await (commentCheckerHook as any)?.['tool.execute.after'](input, output);
+      await (directoryAgentsInjectorHook as any)?.['tool.execute.after'](
+        input,
+        output,
+      );
+      await (directoryReadmeInjectorHook as any)?.['tool.execute.after'](
+        input,
+        output,
+      );
+      await (rulesInjectorHook as any)?.['tool.execute.after'](input, output);
+      await (emptyTaskResponseDetectorHook as any)?.['tool.execute.after'](
+        input,
+        output,
+      );
+      await (interactiveBashSessionHook as any)?.['tool.execute.after'](
+        input,
+        output,
+      );
+      await (editErrorRecoveryHook as any)?.['tool.execute.after'](
+        input,
+        output,
+      );
     },
   };
 };

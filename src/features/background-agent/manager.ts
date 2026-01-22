@@ -7,12 +7,12 @@ import type {
 } from "./types"
 import { log } from "../../shared/logger"
 import { ConcurrencyManager } from "./concurrency"
-import type { BackgroundTaskConfig } from "../../config/types"
+import type { BackgroundTaskConfig } from "../../config/schema"
 import {
   findNearestMessageWithFields,
   MESSAGE_STORAGE,
 } from "../hook-message-injector"
-import { subagentSessions } from "../../shared/session-manager"
+import { subagentSessions } from "../claude-code-session-state"
 
 const TASK_TTL_MS = 30 * 60 * 1000
 
@@ -323,162 +323,6 @@ export class BackgroundManager {
     this.stopPolling()
     this.tasks.clear()
     this.notifications.clear()
-  }
-
-  // Compatibility methods for init-deep commands
-  async initialize(session: any): Promise<void> {
-    // No initialization needed for the new implementation
-    return Promise.resolve()
-  }
-
-  async getOutput(taskId: string): Promise<GetBackgroundOutputResult> {
-    const task = this.getTask(taskId)
-    if (!task) {
-      throw new Error(`Task ${taskId} not found`)
-    }
-
-    if (task.status === 'running') {
-      return {
-        status: 'running',
-        output: '',
-        taskId,
-      }
-    }
-
-    if (task.status === 'completed') {
-      try {
-        const messagesResult = await this.client.session.messages({
-          path: { id: task.sessionID },
-        })
-
-        let output = ''
-        if (!messagesResult.error && messagesResult.data) {
-          const messages = messagesResult.data as Array<{
-            info?: { role?: string }
-            parts?: Array<{ type?: string; text?: string }>
-          }>
-          const assistantMsgs = messages.filter(
-            (m) => m.info?.role === "assistant"
-          )
-
-          for (const msg of assistantMsgs) {
-            const parts = msg.parts ?? []
-            for (const part of parts) {
-              if (part.type === "text" && part.text) {
-                output += part.text + "\n"
-              }
-            }
-          }
-        }
-
-        return {
-          status: 'completed',
-          output,
-          result: output,
-          taskId,
-        }
-      } catch (error) {
-        return {
-          status: 'error',
-          error: error instanceof Error ? error.message : String(error),
-          taskId,
-        }
-      }
-    }
-
-    if (task.status === 'error') {
-      return {
-        status: 'error',
-        error: task.error,
-        taskId,
-      }
-    }
-
-    return {
-      status: 'cancelled',
-      taskId,
-    }
-  }
-
-  async createTask(options: any): Promise<BackgroundTask> {
-    // Legacy method - create a task manually
-    const task: BackgroundTask = {
-      id: options.id || `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      sessionID: options.sessionId || '',
-      parentSessionID: options.sessionId || '',
-      parentMessageID: '0',
-      description: 'Legacy task',
-      prompt: '',
-      agent: 'default',
-      status: 'running',
-      startedAt: new Date(),
-    }
-
-    this.tasks.set(task.id, task)
-    return task
-  }
-
-  async completeTask(taskId: string, result?: any): Promise<BackgroundTask> {
-    const task = this.getTask(taskId)
-    if (!task) {
-      throw new Error(`Task ${taskId} not found`)
-    }
-
-    task.status = 'completed'
-    task.result = result
-    task.completedAt = new Date()
-
-    this.tasks.set(taskId, task)
-    this.markForNotification(task)
-    this.notifyParentSession(task)
-    return task
-  }
-
-  async failTask(taskId: string, error: string | Error): Promise<BackgroundTask> {
-    const task = this.getTask(taskId)
-    if (!task) {
-      throw new Error(`Task ${taskId} not found`)
-    }
-
-    task.status = 'error'
-    task.error = error instanceof Error ? error.message : error
-    task.completedAt = new Date()
-
-    this.tasks.set(taskId, task)
-    this.markForNotification(task)
-    this.notifyParentSession(task)
-    return task
-  }
-
-  async cancelTask(taskId: string, options: any = {}): Promise<BackgroundTask> {
-    const task = this.getTask(taskId)
-    if (!task) {
-      throw new Error(`Task ${taskId} not found`)
-    }
-
-    task.status = 'cancelled'
-    task.completedAt = new Date()
-
-    this.tasks.set(taskId, task)
-    this.markForNotification(task)
-    this.notifyParentSession(task)
-    return task
-  }
-
-  // Agent discovery compatibility methods
-  getAvailableAgents(): string[] {
-    return ['explore', 'librarian', 'build', 'test', 'review', 'default']
-  }
-
-  isAgentAvailable(agentName: string): boolean {
-    const available = this.getAvailableAgents()
-    return available.includes(agentName)
-  }
-
-  validateAgent(agentName: string): void {
-    if (!this.isAgentAvailable(agentName)) {
-      throw new Error(`Agent "${agentName}" not found. Available agents: ${this.getAvailableAgents().join(', ')}`)
-    }
   }
 
   private notifyParentSession(task: BackgroundTask): void {

@@ -1,27 +1,27 @@
-import type { AgentSession } from "../../../types.d";
-import type { DiscoveryResult, ExistingAgent, ScaleMetrics } from "./types.ts";
-import { BackgroundManager } from "../../features/background-agent/manager.ts";
-import { GetBackgroundOutputResult, BackgroundTask } from "../../features/background-agent/types.ts";
-import { EXPLORE_PROMPTS, DEFAULT_MAX_DEPTH } from "./constants.ts";
+import type { AgentSession } from '../../../types.d';
+import type { DiscoveryResult, ExistingAgent, ScaleMetrics } from './types.ts';
+import { BackgroundManager } from '../../features/background-agent/manager.ts';
+import type { BackgroundTask } from '../../features/background-agent/types.ts';
+import { EXPLORE_PROMPTS, DEFAULT_MAX_DEPTH } from './constants.ts';
 
 export async function runDiscoveryPhase(
   session: AgentSession,
   manager: BackgroundManager,
-  args: Record<string, any>
+  args: Record<string, any>,
 ): Promise<DiscoveryResult> {
-  const createNew = args["--create-new"] || false;
-  const maxDepth = args["--max-depth"] || DEFAULT_MAX_DEPTH;
-  const projectName = args["--project-name"] || "Unknown Project";
+  const createNew = args['--create-new'] || false;
+  const maxDepth = args['--max-depth'] || DEFAULT_MAX_DEPTH;
+  const projectName = args['--project-name'] || 'Unknown Project';
 
   // Fire background explore agents
   const taskIds: string[] = [];
   for (const prompt of EXPLORE_PROMPTS) {
     const task = await manager.launch({
-      description: "Explore project structure",
+      description: 'Explore project structure',
       prompt,
-      agent: "explore",
+      agent: 'explore',
       parentSessionID: session.id,
-      parentMessageID: "0"
+      parentMessageID: '0',
     });
     taskIds.push(task.id);
   }
@@ -37,29 +37,29 @@ export async function runDiscoveryPhase(
     await manager.launch({
       description: `Additional analysis task ${i + 1}`,
       prompt: `Perform deep analysis of project complexity hotspots`,
-      agent: "explore",
+      agent: 'explore',
       parentSessionID: session.id,
-      parentMessageID: "0"
+      parentMessageID: '0',
     });
   }
 
   // Collect background results
   const backgroundResults: BackgroundTask[] = [];
   for (const taskId of taskIds) {
-    const output = await manager.getOutput(taskId);
-    if (output && output.status === 'completed') {
+    const task = manager.getTask(taskId);
+    if (task && task.status === 'completed') {
       backgroundResults.push({
         id: taskId,
         sessionID: session.id,
         parentSessionID: session.id,
-        parentMessageID: "0",
-        description: "Explore analysis",
-        prompt: "Analysis complete",
-        agent: "explore",
+        parentMessageID: '0',
+        description: 'Explore analysis',
+        prompt: 'Analysis complete',
+        agent: 'explore',
         status: 'completed',
         startedAt: new Date(),
         completedAt: new Date(),
-        result: output.output || output.result
+        result: task.result,
       });
     }
   }
@@ -71,23 +71,39 @@ export async function runDiscoveryPhase(
     scaleMetrics,
     createNew,
     maxDepth,
-    projectName
+    projectName,
   };
 }
 
-async function analyzeProjectStructure(maxDepth: number, session: AgentSession): Promise<string[]> {
+async function analyzeProjectStructure(
+  maxDepth: number,
+  session: AgentSession,
+): Promise<string[]> {
   // Get all directories
   const dirs = await session.glob({
-    pattern: "**/*",
-    include: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.py", "**/*.go", "**/*.rs"],
-    exclude: ["**/node_modules/**", "**/.git/**", "**/venv/**", "**/dist/**", "**/build/**"],
-    maxDepth
+    pattern: '**/*',
+    include: [
+      '**/*.ts',
+      '**/*.tsx',
+      '**/*.js',
+      '**/*.py',
+      '**/*.go',
+      '**/*.rs',
+    ],
+    exclude: [
+      '**/node_modules/**',
+      '**/.git/**',
+      '**/venv/**',
+      '**/dist/**',
+      '**/build/**',
+    ],
+    maxDepth,
   });
 
   // Filter to unique directories
   const uniqueDirs = new Set<string>();
   for (const file of dirs) {
-    const dir = file.split("/").slice(0, -1).join("/");
+    const dir = file.split('/').slice(0, -1).join('/');
     uniqueDirs.add(dir);
   }
 
@@ -96,47 +112,53 @@ async function analyzeProjectStructure(maxDepth: number, session: AgentSession):
 
 async function findExistingAgents(
   session: AgentSession,
-  createNew: boolean
+  createNew: boolean,
 ): Promise<ExistingAgent[]> {
   const agents: ExistingAgent[] = [];
 
   // Find existing AGENTS.md files
   const agentFiles = await session.glob({
-    pattern: "**/AGENTS.md",
-    exclude: ["**/node_modules/**", "**/.git/**"]
+    pattern: '**/AGENTS.md',
+    exclude: ['**/node_modules/**', '**/.git/**'],
   });
 
   for (const file of agentFiles) {
     const content = await session.read({ filePath: file });
-    
-    const hasOverview = await session.grep({
-      filePath: file,
-      pattern: "^## OVERVIEW$"
-    }).then((results: any) => results.length > 0);
 
-    const hasConventions = await session.grep({
-      filePath: file,
-      pattern: "^## CONVENTIONS$"
-    }).then((results: any) => results.length > 0);
+    const hasOverview = await session
+      .grep({
+        filePath: file,
+        pattern: '^## OVERVIEW$',
+      })
+      .then((results: any) => results.length > 0);
 
-    const hasAntiPatterns = await session.grep({
-      filePath: file,
-      pattern: "^## ANTI-PATTERNS$"
-    }).then((results: any) => results.length > 0);
+    const hasConventions = await session
+      .grep({
+        filePath: file,
+        pattern: '^## CONVENTIONS$',
+      })
+      .then((results: any) => results.length > 0);
+
+    const hasAntiPatterns = await session
+      .grep({
+        filePath: file,
+        pattern: '^## ANTI-PATTERNS$',
+      })
+      .then((results: any) => results.length > 0);
 
     agents.push({
       path: file,
       content,
       hasOverview,
       hasConventions,
-      hasAntiPatterns
+      hasAntiPatterns,
     });
 
     if (createNew) {
       // Remove existing file for --create-new mode
       await session.write({
         filePath: file,
-        content: ""
+        content: '',
       });
     }
   }
@@ -144,31 +166,45 @@ async function findExistingAgents(
   return agents;
 }
 
-async function measureProjectScale(session: AgentSession): Promise<ScaleMetrics> {
+async function measureProjectScale(
+  session: AgentSession,
+): Promise<ScaleMetrics> {
   // Count total files
   const allFiles = await session.glob({
-    pattern: "**/*",
-    exclude: ["**/node_modules/**", "**/.git/**", "**/venv/**", "**/dist/**", "**/build/**"]
+    pattern: '**/*',
+    exclude: [
+      '**/node_modules/**',
+      '**/.git/**',
+      '**/venv/**',
+      '**/dist/**',
+      '**/build/**',
+    ],
   });
   const totalFiles = allFiles.length;
 
   // Count total lines in code files
   let totalLines = 0;
   const codeFiles = await session.glob({
-    pattern: "**/*.{ts,tsx,js,py,go,rs}",
-    exclude: ["**/node_modules/**", "**/.git/**", "**/venv/**", "**/dist/**", "**/build/**"]
+    pattern: '**/*.{ts,tsx,js,py,go,rs}',
+    exclude: [
+      '**/node_modules/**',
+      '**/.git/**',
+      '**/venv/**',
+      '**/dist/**',
+      '**/build/**',
+    ],
   });
 
   for (const file of codeFiles) {
     const content = await session.read({ filePath: file });
-    totalLines += content.split("\n").length;
+    totalLines += content.split('\n').length;
   }
 
   // Count large files (>500 lines)
   let largeFiles = 0;
   for (const file of codeFiles) {
     const content = await session.read({ filePath: file });
-    const lines = content.split("\n").length;
+    const lines = content.split('\n').length;
     if (lines > 500) {
       largeFiles++;
     }
@@ -177,7 +213,7 @@ async function measureProjectScale(session: AgentSession): Promise<ScaleMetrics>
   // Measure max depth
   let maxDepth = 0;
   for (const file of allFiles) {
-    const depth = file.split("/").length;
+    const depth = file.split('/').length;
     if (depth > maxDepth) {
       maxDepth = depth;
     }
@@ -187,7 +223,7 @@ async function measureProjectScale(session: AgentSession): Promise<ScaleMetrics>
     totalFiles,
     totalLines,
     largeFiles,
-    maxDepth
+    maxDepth,
   };
 }
 

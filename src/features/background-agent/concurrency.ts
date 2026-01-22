@@ -1,4 +1,4 @@
-import type { BackgroundTaskConfig } from "../../config/types"
+import type { BackgroundTaskConfig } from "../../config/schema"
 
 export class ConcurrencyManager {
   private config?: BackgroundTaskConfig

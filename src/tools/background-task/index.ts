@@ -1,13 +1,8 @@
-import { createBackgroundTaskTool, getBackgroundOutputTool, cancelBackgroundTaskTool } from "./tools.ts";
-import type { BackgroundManager } from '../../features/background-agent/manager';
+export {
+  createBackgroundTask,
+  createBackgroundOutput,
+  createBackgroundCancel,
+} from "./tools"
 
-export function createBackgroundTaskTools(manager: BackgroundManager) {
-  return {
-    background_task: createBackgroundTaskTool(manager),
-    background_output: getBackgroundOutputTool(manager),
-    background_cancel: cancelBackgroundTaskTool(manager),
-  };
-}
-
-export type { BackgroundTask, BackgroundTaskOptions, CancelOptions, CreateBackgroundTaskOptions, GetBackgroundOutputOptions, GetBackgroundOutputResult } from '../../background-agent/types';
-export type { BackgroundManager } from '../../background-agent/manager';
+export type * from "./types"
+export * from "./constants"

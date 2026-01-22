@@ -1,32 +1,33 @@
-import type { PluginInput } from "@opencode-ai/plugin"
+import type { PluginInput } from '@opencode-ai/plugin';
 
 interface KeywordDetectorConfig {
-  keywords?: string[]
-  action?: (keyword: string, sessionID: string) => Promise<void> | void
+  keywords?: string[];
+  action?: (keyword: string, sessionID: string) => Promise<void> | void;
 }
 
 export function createKeywordDetectorHook(
   ctx: PluginInput,
-  config: KeywordDetectorConfig = {}
+  config: KeywordDetectorConfig = {},
 ) {
-  const { keywords = [], action } = config
+  const { keywords = [], action } = config;
 
   return {
-    "tool.execute.after": async (
+    'tool.execute.after': async (
       input: { tool: string; sessionID: string },
-      output: { result: string | undefined }
+      output: { result: string | undefined },
     ) => {
-      if (!output.result || typeof output.result !== "string") return
+      if (!output.result || typeof output.result !== 'string') return;
 
+      const result = output.result;
       const foundKeywords = keywords.filter((keyword) =>
-        output.result.toLowerCase().includes(keyword.toLowerCase())
-      )
+        result.toLowerCase().includes(keyword.toLowerCase()),
+      );
 
       if (foundKeywords.length > 0 && action) {
         for (const keyword of foundKeywords) {
-          await action(keyword, input.sessionID)
+          await action(keyword, input.sessionID);
         }
       }
     },
-  }
+  };
 }
