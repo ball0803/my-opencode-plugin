@@ -8,6 +8,8 @@ declare module 'fs' {
   export function existsSync(path: string): boolean;
 }
 
+declare module 'js-yaml';
+
 export interface AgentSession {
   id: string;
   getStatus(): Promise<string>;

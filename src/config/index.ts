@@ -30,6 +30,7 @@ export * from './types.ts';
 // Re-export main config schema from schema.ts
 export {
   MyOpenCodePluginConfigSchema,
+  DEFAULT_CONFIG,
   type MyOpenCodePluginConfig,
 } from './schema.ts';
 
@@ -101,7 +102,10 @@ export class ConfigLoader {
   }
 
   getSkillConfig(skillName: string): SkillDefinition | boolean | undefined {
-    return this.config.skills?.[skillName as keyof SkillsConfig];
+    if (!this.config.skills || Array.isArray(this.config.skills)) {
+      return undefined;
+    }
+    return this.config.skills[skillName];
   }
 
   getAvailableSkills(): string[] {
@@ -134,7 +138,9 @@ export class ConfigLoader {
   }
 
   getRalphLoopConfig(): RalphLoopConfig {
-    return this.config.ralph_loop || {};
+    return (
+      this.config.ralph_loop || { enabled: false, default_max_iterations: 100 }
+    );
   }
 
   getExperimentalConfig(): ExperimentalConfig {

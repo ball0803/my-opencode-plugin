@@ -5,11 +5,8 @@ import { log, getMainSessionID, setMainSession } from './shared/index.ts';
 import { BackgroundManager } from './features/background-agent/manager.js';
 import type { BackgroundManagerOptions } from './core/types.js';
 
-import { createBackgroundTaskTools } from './tools/background-task/index.js';
-import { createCallAgentTools } from './tools/call-agent/index.js';
-import { createSubagentTools } from './tools/subagent/index.js';
-import { createAgentDiscoveryTools } from './tools/agent-discovery/index.js';
-import { createAstGrepTools } from './tools/ast-grep/index.js';
+import { createBackgroundTask } from './tools/background-task/index.js';
+import { ast_grep_search, ast_grep_replace } from './tools/ast-grep/index.js';
 
 import { createConfigHandler } from './plugin-handlers/config-handler.js';
 import {
@@ -34,7 +31,7 @@ import {
 
 import { loadPluginConfig } from './plugin-config.ts';
 import type { MyOpenCodePluginConfig } from './config/schema.ts';
-import type { AgentSession } from './features/background-agent/types.js';
+import type { AgentSession } from '../types.d.ts';
 
 const MyOpenCodePlugin: Plugin = async (ctx) => {
   const pluginConfig = loadPluginConfig(ctx.directory, ctx);
@@ -217,7 +214,7 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
         input,
         output,
       );
-      await rulesInjectorHook?.['tool.execute.before']?.(input, output);
+      await rulesInjectorHook?.['tool.execute.before']?.(input);
 
       if (input.tool === 'task') {
         const args = output.args as Record<string, unknown>;

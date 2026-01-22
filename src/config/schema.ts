@@ -49,13 +49,20 @@ export const DEFAULT_CONFIG: MyOpenCodePluginConfig = {
   disabled_hooks: [],
   disabled_commands: [],
   permissions: {},
-  claude_code: {},
-  sisyphus_agent: {},
+  claude_code: { enabled: false },
+  sisyphus_agent: { disabled: false },
   comment_checker: {},
   experimental: {},
   auto_update: false,
   skills: {},
-  ralph_loop: {},
+  ralph_loop: { enabled: false, default_max_iterations: 100 },
   background_task: {},
   notification: {},
 };
+
+export type {
+  SkillsConfig,
+  SkillDefinition,
+  BackgroundTaskConfig,
+  RalphLoopConfig,
+} from './types.ts';

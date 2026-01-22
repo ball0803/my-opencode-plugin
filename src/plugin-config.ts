@@ -3,6 +3,7 @@ import * as path from 'path';
 import {
   MyOpenCodePluginConfig,
   MyOpenCodePluginConfigSchema,
+  DEFAULT_CONFIG,
 } from './config/index.ts';
 import {
   log,
@@ -95,7 +96,7 @@ export function loadPluginConfig(
 
   // Load user config first (base)
   let config: MyOpenCodePluginConfig =
-    loadConfigFromPath(userConfigPath, ctx) ?? {};
+    loadConfigFromPath(userConfigPath, ctx) ?? DEFAULT_CONFIG;
 
   // Override with project config
   const projectConfig = loadConfigFromPath(projectConfigPath, ctx);
