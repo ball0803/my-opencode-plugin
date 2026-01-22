@@ -4,7 +4,7 @@ export function createEditErrorRecoveryHook(ctx: PluginInput) {
   return {
     'tool.execute.after': async (
       input: { tool: string; sessionID: string },
-      output: { result: { success: boolean; error?: string } | undefined },
+      output: { result?: { success: boolean; error?: string } | undefined },
     ) => {
       if (input.tool !== 'edit') return;
 
@@ -22,7 +22,7 @@ export function createEditErrorRecoveryHook(ctx: PluginInput) {
                   text: `Edit failed: ${result?.error || 'Unknown error'}. Please try again or use a different approach.`,
                 },
               ],
-            },
+            } as any,
           })
           .catch(() => {});
       }

@@ -10,6 +10,48 @@ declare module 'fs' {
 
 declare module 'js-yaml';
 
+declare module '../builtin-skills/types' {
+  export interface BuiltinSkill {
+    name: string;
+    description: string;
+    execute: (input: any) => Promise<any>;
+  }
+}
+
+declare module '../hooks/claude-code-hooks/types' {
+  export type ClaudeHookEvent = string;
+  export interface PluginConfig {
+    disabledHooks?: boolean | string[];
+  }
+}
+
+declare module '../../features/background-agent/manager' {
+  export interface BackgroundManager {
+    launch(options: any): Promise<any>;
+    getTask(taskId: string): any;
+    getTasksByParentSession(sessionID: string): any[];
+    getAllDescendantTasks(sessionID: string): any[];
+    findBySession(sessionID: string): any;
+    handleEvent(event: any): void;
+    getPendingNotifications(sessionID: string): any[];
+    clearNotifications(sessionID: string): void;
+    cleanup(): void;
+  }
+}
+
+declare module '../../hooks/types' {
+  export interface MessageWithParts {
+    info: any;
+    parts: any[];
+  }
+  export type MessagesTransformHook = {
+    'experimental.chat.messages.transform'?: (
+      input: Record<string, never>,
+      output: { messages: MessageWithParts[] },
+    ) => Promise<void>;
+  };
+}
+
 export interface AgentSession {
   id: string;
   getStatus(): Promise<string>;

@@ -99,7 +99,7 @@ export function createRalphLoopHook(
                   text: `Ralph Loop completed after ${loop.iterationCount} iterations.`,
                 },
               ],
-            },
+            } as any,
           })
           .catch(() => {});
         return;

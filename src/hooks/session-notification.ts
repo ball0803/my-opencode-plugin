@@ -34,7 +34,7 @@ export function createSessionNotificationHook(
                   text: message,
                 },
               ],
-            },
+            } as any,
           })
           .catch(() => {});
       }
