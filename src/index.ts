@@ -5,9 +5,6 @@ import { log, getMainSessionID, setMainSession } from './shared/index.ts';
 import { BackgroundManager } from './features/background-agent/manager.js';
 import type { BackgroundManagerOptions } from './core/types.js';
 
-import { createBackgroundTask } from './tools/background-task/index.js';
-import { ast_grep_search, ast_grep_replace } from './tools/ast-grep/index.js';
-
 import { createConfigHandler } from './plugin-handlers/config-handler.js';
 import {
   createAutoSlashCommandHook,
@@ -23,15 +20,11 @@ import {
   createKeywordDetectorHook,
   createRalphLoopHook,
   createRulesInjectorHook,
-  createSessionNotificationHook,
-  createThinkingModeHook,
-  createToolOutputTruncatorHook,
   createTodoContinuationEnforcer,
-} from './hooks/index.js';
+} from './hooks/index.ts';
 
 import { loadPluginConfig } from './plugin-config.ts';
 import type { MyOpenCodePluginConfig } from './config/schema.ts';
-import type { AgentSession } from '../types.d.ts';
 
 const MyOpenCodePlugin: Plugin = async (ctx) => {
   const pluginConfig = loadPluginConfig(ctx.directory, ctx);
@@ -88,25 +81,14 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
   const rulesInjectorHook = isHookEnabled('rules-injector')
     ? createRulesInjectorHook(ctx)
     : null;
-  const sessionNotificationHook = isHookEnabled('session-notification')
-    ? createSessionNotificationHook(ctx)
-    : null;
-  const thinkingModeHook = isHookEnabled('thinking-mode')
-    ? createThinkingModeHook(ctx)
-    : null;
-  const toolOutputTruncatorHook = isHookEnabled('tool-output-truncator')
-    ? createToolOutputTruncatorHook(ctx)
-    : null;
 
   return {
     tool: {},
     event: async (input) => {
       await (backgroundNotificationHook as any)?.event(input);
-      await (sessionNotificationHook as any)?.event(input);
       await (directoryAgentsInjectorHook as any)?.event(input);
       await (directoryReadmeInjectorHook as any)?.event(input);
       await (rulesInjectorHook as any)?.event(input);
-      await (thinkingModeHook as any)?.event(input);
       await (interactiveBashSessionHook as any)?.event(input);
       await (ralphLoopHook as any)?.event(input);
 
@@ -214,7 +196,7 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
         input,
         output,
       );
-      await rulesInjectorHook?.['tool.execute.before']?.(input);
+      await rulesInjectorHook?.['tool.execute.before']?.(input, output);
 
       if (input.tool === 'task') {
         const args = output.args as Record<string, unknown>;
@@ -249,7 +231,7 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
             /--completion-promise=["]?([^"'\s]+)["]?/i,
           );
 
-          (ralphLoopHook as any).startLoop(sessionID, prompt, {
+          ralphLoopHook.startLoop(sessionID, prompt, {
             maxIterations: maxIterMatch
               ? parseInt(maxIterMatch[1], 10)
               : undefined,
@@ -261,32 +243,16 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
       }
     },
     'tool.execute.after': async (input, output) => {
-      await (toolOutputTruncatorHook as any)?.['tool.execute.after'](
+      await commentCheckerHook?.['tool.execute.after'](input, output);
+      await directoryAgentsInjectorHook?.['tool.execute.after'](input, output);
+      await directoryReadmeInjectorHook?.['tool.execute.after'](input, output);
+      await rulesInjectorHook?.['tool.execute.after'](input, output);
+      await emptyTaskResponseDetectorHook?.['tool.execute.after'](
         input,
         output,
       );
-      await (commentCheckerHook as any)?.['tool.execute.after'](input, output);
-      await (directoryAgentsInjectorHook as any)?.['tool.execute.after'](
-        input,
-        output,
-      );
-      await (directoryReadmeInjectorHook as any)?.['tool.execute.after'](
-        input,
-        output,
-      );
-      await (rulesInjectorHook as any)?.['tool.execute.after'](input, output);
-      await (emptyTaskResponseDetectorHook as any)?.['tool.execute.after'](
-        input,
-        output,
-      );
-      await (interactiveBashSessionHook as any)?.['tool.execute.after'](
-        input,
-        output,
-      );
-      await (editErrorRecoveryHook as any)?.['tool.execute.after'](
-        input,
-        output,
-      );
+      await interactiveBashSessionHook?.['tool.execute.after'](input, output);
+      await editErrorRecoveryHook?.['tool.execute.after'](input, output);
     },
   };
 };
