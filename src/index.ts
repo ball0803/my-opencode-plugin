@@ -31,14 +31,14 @@ const MyOpenCodePlugin: Plugin = async (ctx) => {
   const disabledHooks = new Set(pluginConfig.disabled_hooks ?? []);
   const isHookEnabled = (hookName: HookName) => !disabledHooks.has(hookName);
 
+  const backgroundManager = new BackgroundManager(ctx);
+
   const autoSlashCommandHook = isHookEnabled('auto-slash-command')
-    ? createAutoSlashCommandHook(ctx)
+    ? createAutoSlashCommandHook()
     : null;
   const backgroundNotificationHook = isHookEnabled('background-notification')
-    ? createBackgroundNotificationHook(ctx)
+    ? createBackgroundNotificationHook(backgroundManager)
     : null;
-
-  const backgroundManager = new BackgroundManager(ctx);
 
   const todoContinuationEnforcer = isHookEnabled('todo-continuation-enforcer')
     ? createTodoContinuationEnforcer(ctx, { backgroundManager })
