@@ -1,4 +1,4 @@
-import type { MessagesTransformHook } from '../../hooks/types.ts';
+import type { MessagesTransformHook } from '../hooks/types.ts';
 import type { Message, Part } from '@opencode-ai/sdk';
 
 type MessageWithParts = {
